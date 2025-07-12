@@ -48,7 +48,4 @@ const SwapSchema = new Schema<ISwap>(
   { timestamps: true }
 )
 
-SwapSchema.index({ requester: 1 })
-SwapSchema.index({ responder: 1 })
-
 export default mongoose.model<ISwap>('Swap', SwapSchema)

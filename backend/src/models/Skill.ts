@@ -22,6 +22,5 @@ const SkillSchema = new Schema<ISkill>(
   { timestamps: { createdAt: true, updatedAt: false } }
 )
 
-SkillSchema.index({ name: 1 })
 
 export default mongoose.model<ISkill>('Skill', SkillSchema)

@@ -1,7 +1,11 @@
 import mongoose from 'mongoose'
 import { logger } from './logger'
 
-const mongoURI = process.env.MONGO_URI as string
+const mongoURI = process.env.MONGO_URI
+
+if (!mongoURI) {
+  throw new Error('MONGO_URI is not defined in environment variables.')
+}
 
 export const connectDB = async (): Promise<void> => {
   try {
@@ -12,10 +16,10 @@ export const connectDB = async (): Promise<void> => {
     process.exit(1)
   }
 
-  // Optional: Handle connection events for resilience
   mongoose.connection.on('disconnected', () => {
     logger.warn('MongoDB disconnected')
   })
+
   mongoose.connection.on('reconnected', () => {
     logger.info('MongoDB reconnected')
   })

@@ -1,0 +1,54 @@
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:00:08.648Z"}
+{"address":"127.0.0.1","code":"ESOCKET","command":"CONN","errno":-4078,"level":"error","message":"Email transporter verification failed: connect ECONNREFUSED 127.0.0.1:587","port":587,"stack":"Error: connect ECONNREFUSED 127.0.0.1:587\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1607:16)","syscall":"connect","timestamp":"2025-07-12T10:00:08.745Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:00:11.044Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:02:39.598Z"}
+{"address":"127.0.0.1","code":"ESOCKET","command":"CONN","errno":-4078,"level":"error","message":"Email transporter verification failed: connect ECONNREFUSED 127.0.0.1:587","port":587,"stack":"Error: connect ECONNREFUSED 127.0.0.1:587\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1607:16)","syscall":"connect","timestamp":"2025-07-12T10:02:39.693Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:02:41.673Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:02:49.219Z"}
+{"address":"127.0.0.1","code":"ESOCKET","command":"CONN","errno":-4078,"level":"error","message":"Email transporter verification failed: connect ECONNREFUSED 127.0.0.1:587","port":587,"stack":"Error: connect ECONNREFUSED 127.0.0.1:587\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1607:16)","syscall":"connect","timestamp":"2025-07-12T10:02:49.429Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:02:50.526Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:02:55.268Z"}
+{"address":"127.0.0.1","code":"ESOCKET","command":"CONN","errno":-4078,"level":"error","message":"Email transporter verification failed: connect ECONNREFUSED 127.0.0.1:587","port":587,"stack":"Error: connect ECONNREFUSED 127.0.0.1:587\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1607:16)","syscall":"connect","timestamp":"2025-07-12T10:02:55.377Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:02:56.275Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:03:03.890Z"}
+{"address":"127.0.0.1","code":"ESOCKET","command":"CONN","errno":-4078,"level":"error","message":"Email transporter verification failed: connect ECONNREFUSED 127.0.0.1:587","port":587,"stack":"Error: connect ECONNREFUSED 127.0.0.1:587\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1607:16)","syscall":"connect","timestamp":"2025-07-12T10:03:04.025Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:03:06.289Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:06:50.437Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:08:12.587Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:08:13.594Z"}
+{"code":"EAUTH","command":"AUTH PLAIN","level":"error","message":"Email transporter verification failed: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-31c3eb4c35asm6800887a91.31 - gsmtp","response":"535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-31c3eb4c35asm6800887a91.31 - gsmtp","responseCode":535,"stack":"Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-31c3eb4c35asm6800887a91.31 - gsmtp\n    at SMTPConnection._formatError (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:809:19)\n    at SMTPConnection._actionAUTHComplete (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:1588:34)\n    at SMTPConnection.<anonymous> (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:556:26)\n    at SMTPConnection._processResponse (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:993:20)\n    at SMTPConnection._onData (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:774:14)\n    at TLSSocket.SMTPConnection._onSocketData (C:\\Users\\KIIT\\Desktop\\skillorbit\\backend\\node_modules\\nodemailer\\lib\\smtp-connection\\index.js:195:44)\n    at TLSSocket.emit (node:events:519:28)\n    at addChunk (node:internal/streams/readable:559:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)\n    at TLSSocket.Readable.push (node:internal/streams/readable:390:5)","timestamp":"2025-07-12T10:08:15.412Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:08:55.280Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:09:13.205Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:09:14.280Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:09:15.545Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:12:51.929Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:12:51.940Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:12:52.942Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:12:53.481Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:12:56.373Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:12:56.384Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:12:58.533Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:12:58.576Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:12:59.345Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:01.323Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:01.331Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:03.449Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:03.458Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:05.900Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:05.908Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:08.565Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:08.575Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:10.641Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:10.648Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:13:11.591Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:13:12.947Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:17.526Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:17.536Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:13:18.272Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:20.121Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:20.132Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:13:22.632Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:13:22.640Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:13:23.801Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:13:24.146Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:13:37.913Z"}

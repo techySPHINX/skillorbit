@@ -1,23 +1,24 @@
-import express, { Application, Request, Response, NextFunction } from 'express'
 import dotenv from 'dotenv'
+dotenv.config()
+
+import express, { Application, Request, Response } from 'express'
 import http from 'http'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
+import { Server as SocketIOServer } from 'socket.io'
 
 import { connectDB } from './config/db'
 import { logger } from './config/logger'
 import { errorHandler } from './middlewares/errorHandler'
 import { apiLimiter } from './middlewares/rateLimiter'
-
 import routes from './routes'
 import { setupSocketIO } from './sockets'
 
-dotenv.config()
-
 const app: Application = express()
 
+// Middleware
 app.use(express.json())
 app.use(
   cors({
@@ -51,7 +52,7 @@ app.use('/api', routes)
 app.use(errorHandler)
 
 const server = http.createServer(app)
-import { Server as SocketIOServer } from 'socket.io'
+
 const io = new SocketIOServer(server, {
   cors: {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || [
@@ -62,6 +63,7 @@ const io = new SocketIOServer(server, {
 })
 
 setupSocketIO(io)
+logger.info('Socket.IO server initialized and ready.')
 
 process.on('SIGINT', async () => {
   logger.info(
