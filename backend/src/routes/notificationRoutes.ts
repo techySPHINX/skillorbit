@@ -4,8 +4,16 @@ import {
   readNotification,
 } from '../controllers/notificationController'
 import { authenticate } from '../middlewares/auth'
+import { apiLimiter } from '../middlewares/rateLimiter'
 
 const router = Router()
+
+/**
+ * Notification routes: protected by centralized rate limiter and authentication
+ */
+
+// Apply the rate limiter to all notification routes for abuse protection
+router.use(apiLimiter)
 
 /**
  * @route GET /notifications

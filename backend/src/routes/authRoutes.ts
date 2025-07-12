@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { register, login, me } from '../controllers/authController'
 import { authenticate } from '../middlewares/auth'
 import { validateBody } from '../middlewares/validation'
+import { apiLimiter } from '../middlewares/rateLimiter'
 import Joi from 'joi'
 
 const router = Router()
@@ -16,6 +17,13 @@ const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 })
+
+/**
+ * Auth routes: protected by centralized rate limiter and validation
+ */
+
+// Apply the rate limiter to all auth routes for security (brute-force protection)
+router.use(apiLimiter)
 
 /**
  * @route POST /auth/register

@@ -7,6 +7,7 @@ import {
 } from '../controllers/userController'
 import { authenticate } from '../middlewares/auth'
 import { validateBody } from '../middlewares/validation'
+import { apiLimiter } from '../middlewares/rateLimiter'
 import Joi from 'joi'
 
 const router = Router()
@@ -20,6 +21,13 @@ const updateProfileSchema = Joi.object({
   skillsWanted: Joi.array().items(Joi.string()),
   isPrivate: Joi.boolean(),
 })
+
+/**
+ * User routes: protected by centralized rate limiter, validation, and authentication
+ */
+
+// Apply the rate limiter to all user routes for abuse protection
+router.use(apiLimiter)
 
 /**
  * @route   GET /users/:id

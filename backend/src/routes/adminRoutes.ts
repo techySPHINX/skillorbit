@@ -10,6 +10,7 @@ import {
 import { authenticate } from '../middlewares/auth'
 import { adminGuard } from '../middlewares/adminGuard'
 import { validateBody } from '../middlewares/validation'
+import { apiLimiter } from '../middlewares/rateLimiter'
 import Joi from 'joi'
 
 const router = Router()
@@ -21,9 +22,11 @@ const messageSchema = Joi.object({
 })
 
 /**
- * Admin routes: secured and production-ready
+ * Admin routes: secured, rate-limited, and production-ready
  */
-router.use(authenticate, adminGuard)
+
+// Apply authentication, admin guard, and centralized rate limiter to all admin routes
+router.use(authenticate, adminGuard, apiLimiter)
 
 /**
  * @route GET /admin/users

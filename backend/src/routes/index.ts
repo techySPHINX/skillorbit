@@ -6,8 +6,15 @@ import swapRoutes from './swapRoutes'
 import feedbackRoutes from './feedbackRoutes'
 import adminRoutes from './adminRoutes'
 import notificationRoutes from './notificationRoutes'
+import { apiLimiter } from '../middlewares/rateLimiter'
 
 const router = Router()
+
+/**
+ * Apply centralized rate limiting to all API routes for security and abuse prevention.
+ * This ensures consistent protection across all major resource endpoints.
+ */
+router.use(apiLimiter)
 
 /**
  * @route /auth

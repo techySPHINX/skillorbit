@@ -8,6 +8,8 @@ import {
 } from '../controllers/swapController'
 import { authenticate } from '../middlewares/auth'
 import { validateBody } from '../middlewares/validation'
+import { apiLimiter } from '../middlewares/rateLimiter'
+import { upload } from '../middlewares/upload'
 import Joi from 'joi'
 
 const router = Router()
@@ -34,11 +36,24 @@ const feedbackSchema = Joi.object({
 })
 
 /**
+ * Swap routes: protected by centralized rate limiter, file upload, and validation
+ */
+
+// Apply the rate limiter to all swap routes for abuse protection
+router.use(apiLimiter)
+
+/**
  * @route POST /swaps
- * @desc Create a new swap request
+ * @desc Create a new swap request (with optional image upload)
  * @access Authenticated users
  */
-router.post('/', authenticate, validateBody(swapSchema), requestSwap)
+router.post(
+  '/',
+  authenticate,
+  upload.single('image'),
+  validateBody(swapSchema),
+  requestSwap
+)
 
 /**
  * @route GET /swaps
