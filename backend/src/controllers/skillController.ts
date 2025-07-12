@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { createSkill, getSkills, deleteSkill } from '../services/skillService'
+import {
+  createSkill,
+  getSkills,
+  deleteSkill,
+  findSkillById,
+} from '../services/skillService'
+import { uploadImageBuffer, deleteImage } from '../services/mediaService'
 import { containsProfanity } from '../services/profanityService'
 import mongoose from 'mongoose'
 
@@ -11,31 +17,38 @@ export const addSkill = async (
   try {
     const { name, category, description } = req.body
 
-    if (!name || !category) {
-      return res
-        .status(400)
-        .json({ message: 'Skill name and category are required.' })
-    }
-
     if (
       containsProfanity(name) ||
       (description && containsProfanity(description))
     ) {
       return res
         .status(400)
-        .json({ message: 'Profanity detected in skill fields.' })
+        .json({ message: 'Profanity detected in skill fields' })
     }
 
-    const currentUser = req.user as any
-    if (!currentUser || !currentUser._id) {
-      return res.status(401).json({ message: 'Unauthorized: user not found' })
+    let image: string | undefined
+    let imagePublicId: string | undefined
+
+    if (req.file) {
+      const { url, public_id } = await uploadImageBuffer(
+        req.file.buffer,
+        'skills'
+      )
+      image = url
+      imagePublicId = public_id
+    }
+
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Unauthorized: User not found.' })
     }
 
     const skill = await createSkill({
       name,
       category,
       description,
-      createdBy: new mongoose.Types.ObjectId(currentUser._id),
+      createdBy: new mongoose.Types.ObjectId(String(req.user._id)),
+      image,
+      imagePublicId,
     })
 
     res.status(201).json({ skill })
@@ -66,6 +79,11 @@ export const removeSkill = async (
     const { id } = req.params
     if (!id) {
       return res.status(400).json({ message: 'Skill ID is required.' })
+    }
+
+    const skill = await findSkillById(id)
+    if (skill && skill.imagePublicId) {
+      await deleteImage(skill.imagePublicId)
     }
 
     await deleteSkill(id)

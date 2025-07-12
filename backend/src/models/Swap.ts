@@ -15,7 +15,18 @@ export interface ISwap extends Document {
   feedback?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
+  image?: string
+  imagePublicId?: string
 }
+
+const MessageSchema = new Schema(
+  {
+    sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    content: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
+  },
+  { _id: false } 
+)
 
 const SwapSchema = new Schema<ISwap>(
   {
@@ -28,17 +39,16 @@ const SwapSchema = new Schema<ISwap>(
       enum: ['pending', 'accepted', 'rejected', 'completed'],
       default: 'pending',
     },
-    messages: [
-      {
-        sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-        content: { type: String, required: true },
-        timestamp: { type: Date, default: Date.now },
-      },
-    ],
+    messages: [MessageSchema],
     scheduledTime: { type: Date },
     feedback: { type: Schema.Types.ObjectId, ref: 'Feedback' },
+    image: { type: String }, 
+    imagePublicId: { type: String }, 
   },
   { timestamps: true }
 )
+
+SwapSchema.index({ requester: 1 })
+SwapSchema.index({ responder: 1 })
 
 export default mongoose.model<ISwap>('Swap', SwapSchema)

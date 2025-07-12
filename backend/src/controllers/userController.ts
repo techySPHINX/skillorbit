@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { findUserById, updateUser } from '../services/userService'
+import { uploadImageBuffer, deleteImage } from '../services/mediaService'
 import { pick } from '../utils/helpers'
 
 export const getProfile = async (
@@ -16,7 +17,7 @@ export const getProfile = async (
 
     const requesterId = (req.user as any)?._id
     const isOwner =
-      requesterId && requesterId.toString() === (user as { _id: string })._id.toString()
+      requesterId && requesterId.toString() === (user._id as string).toString()
 
     if (user.isPrivate && !isOwner) {
       return res.status(403).json({ message: 'This profile is private' })
@@ -60,6 +61,41 @@ export const updateProfile = async (
     }
 
     res.json({ user })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const updateProfilePhoto = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' })
+    }
+
+    const currentUser = req.user as { _id: string } | undefined
+    if (!currentUser || !currentUser._id) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+    const user = await findUserById(currentUser._id)
+    if (user?.profilePhoto && user.profilePhotoPublicId) {
+      await deleteImage(user.profilePhotoPublicId)
+    }
+
+    const { url, public_id } = await uploadImageBuffer(
+      req.file.buffer,
+      'profile_photos'
+    )
+
+    const updated = await updateUser(currentUser._id, {
+      profilePhoto: url,
+      profilePhotoPublicId: public_id,
+    })
+
+    res.json({ profilePhoto: updated?.profilePhoto })
   } catch (err) {
     next(err)
   }

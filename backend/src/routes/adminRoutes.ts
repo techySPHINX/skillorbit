@@ -7,7 +7,8 @@ import {
   sendPlatformMessage,
   viewAdminLogs,
 } from '../controllers/adminController'
-import { authenticate, requireRole } from '../middlewares/auth'
+import { authenticate } from '../middlewares/auth'
+import { adminGuard } from '../middlewares/adminGuard'
 import { validateBody } from '../middlewares/validation'
 import Joi from 'joi'
 
@@ -22,7 +23,7 @@ const messageSchema = Joi.object({
 /**
  * Admin routes: secured and production-ready
  */
-router.use(authenticate, requireRole('admin'))
+router.use(authenticate, adminGuard)
 
 /**
  * @route GET /admin/users

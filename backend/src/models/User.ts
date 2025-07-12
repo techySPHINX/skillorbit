@@ -5,6 +5,7 @@ export interface IUser extends Document {
   email: string
   passwordHash: string
   profilePhoto?: string
+  profilePhotoPublicId?: string
   skillsOffered: mongoose.Types.ObjectId[]
   skillsWanted: mongoose.Types.ObjectId[]
   location?: string
@@ -21,9 +22,16 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      match: [/\S+@\S+\.\S+/, 'Invalid email address'],
+    },
     passwordHash: { type: String, required: true },
     profilePhoto: { type: String },
+    profilePhotoPublicId: { type: String },
     skillsOffered: [{ type: Schema.Types.ObjectId, ref: 'Skill' }],
     skillsWanted: [{ type: Schema.Types.ObjectId, ref: 'Skill' }],
     location: { type: String },
@@ -36,5 +44,7 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 )
+
+UserSchema.index({ email: 1 })
 
 export default mongoose.model<IUser>('User', UserSchema)

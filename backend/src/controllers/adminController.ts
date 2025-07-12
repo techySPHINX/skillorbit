@@ -11,7 +11,6 @@ import {
   getPopularSkills,
 } from '../services/analyticsService'
 import { sendEmail } from '../services/emailService'
-import { runAnalyticsJob } from '../jobs/analyticsJob'
 
 export const listUsers = async (
   req: Request,

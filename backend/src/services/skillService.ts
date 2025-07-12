@@ -72,3 +72,16 @@ export const findSkillByName = async (name: string): Promise<ISkill | null> => {
     throw new Error('Failed to find skill by name.')
   }
 }
+
+export const findSkillById = async (id: string): Promise<ISkill | null> => {
+  try {
+    if (!id) {
+      throw new Error('Skill ID is required.')
+    }
+
+    return await Skill.findById(id).lean().exec()
+  } catch (error) {
+    logger.error('Error finding skill by ID:', error)
+    throw new Error('Failed to find skill by ID.')
+  }
+}

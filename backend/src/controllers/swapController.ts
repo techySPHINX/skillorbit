@@ -1,3 +1,5 @@
+// src/controllers/swapController.ts
+
 import { Request, Response, NextFunction } from 'express'
 import {
   createSwap,
@@ -6,28 +8,40 @@ import {
   addSwapMessage,
   addSwapFeedback,
 } from '../services/swapService'
+import { uploadImageBuffer } from '../services/mediaService'
 
+/**
+ * Create a new swap request.
+ * - Handles optional image upload via Cloudinary.
+ * - Requires authentication.
+ */
 export const requestSwap = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const currentUser = req.user as any
-    if (!currentUser || !currentUser._id) {
-      return res.status(401).json({ message: 'Unauthorized' })
+    let imageUrl: string | undefined
+    let imagePublicId: string | undefined
+
+    if (req.file) {
+      const { url, public_id } = await uploadImageBuffer(
+        req.file.buffer,
+        'swaps'
+      )
+      imageUrl = url
+      imagePublicId = public_id
     }
 
-    const { responder, skillOffered, skillWanted } = req.body
-    if (!responder || !skillOffered || !skillWanted) {
-      return res.status(400).json({
-        message: 'responder, skillOffered, and skillWanted are required',
-      })
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Unauthorized' })
     }
 
     const swap = await createSwap({
       ...req.body,
-      requester: currentUser._id,
+      requester: req.user._id,
+      image: imageUrl,
+      imagePublicId,
     })
 
     res.status(201).json({ swap })
@@ -36,6 +50,9 @@ export const requestSwap = async (
   }
 }
 
+/**
+ * List swaps for the authenticated user, optionally filtered by status.
+ */
 export const listSwaps = async (
   req: Request,
   res: Response,
@@ -57,6 +74,9 @@ export const listSwaps = async (
   }
 }
 
+/**
+ * Change the status of a swap (accept, reject, complete).
+ */
 export const changeSwapStatus = async (
   req: Request,
   res: Response,
@@ -79,6 +99,9 @@ export const changeSwapStatus = async (
   }
 }
 
+/**
+ * Send a message in the context of a swap (real-time chat).
+ */
 export const sendSwapMessage = async (
   req: Request,
   res: Response,
@@ -104,6 +127,9 @@ export const sendSwapMessage = async (
   }
 }
 
+/**
+ * Attach feedback to a completed swap.
+ */
 export const addFeedbackToSwap = async (
   req: Request,
   res: Response,
