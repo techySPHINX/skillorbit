@@ -2,7 +2,7 @@ import { api } from "./axios";
 
 export const getUserProfile = (id: string) => api.get(`/users/${id}`);
 
-export const updateUserProfile = (data: any) => api.put("/users", data);
+export const updateUserProfile = (data: unknown) => api.put("/users", data);
 
 export const updateProfilePhoto = (file: File) => {
   const formData = new FormData();

@@ -1,7 +1,5 @@
-import { io, Socket } from "socket.io-client";
+import  io  from "socket.io-client";
 
-export const socket: Socket = io(import.meta.env.VITE_API_URL, {
-  withCredentials: true,
+export const socket = io(import.meta.env.VITE_API_URL, {
   autoConnect: false,
 });
-
