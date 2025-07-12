@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { loginUser } from "../../store/authSlice";
@@ -12,21 +13,28 @@ import SectionTitle from "../../components/SectionTitle";
 
 export default function LoginForm() {
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state: { auth: any; }) => state.auth);
+  const navigate = useNavigate();
+  const { loading, error, user } = useAppSelector((state: any) => state.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await dispatch(loginUser({ email, password }));
+  };
 
   return (
     <PageContainer>
       <Card>
         <SectionTitle>Sign In</SectionTitle>
         {error && <ErrorAlert>{error}</ErrorAlert>}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            dispatch(loginUser({ email, password }));
-          }}
-        >
+        <form onSubmit={handleLogin}>
           <Input
             type="email"
             placeholder="Email"

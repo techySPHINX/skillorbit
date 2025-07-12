@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { registerUser } from "../../store/authSlice";
@@ -12,20 +13,30 @@ import SectionTitle from "../../components/SectionTitle";
 
 export default function RegisterForm() {
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state: { auth: any; }) => state.auth);
+  const navigate = useNavigate();
+  const { loading, error } = useAppSelector((state: any) => state.auth);
   const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [registered, setRegistered] = useState(false);
+  useEffect(() => {
+    if (registered) {
+      navigate("/login");
+    }
+  }, [registered, navigate]);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const resultAction = await dispatch(registerUser(form));
+    if (registerUser.fulfilled.match(resultAction)) {
+      setRegistered(true);
+    }
+  };
 
   return (
     <PageContainer>
       <Card>
         <SectionTitle>Create Account</SectionTitle>
         {error && <ErrorAlert>{error}</ErrorAlert>}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            dispatch(registerUser(form));
-          }}
-        >
+        <form onSubmit={handleRegister}>
           <Input
             type="text"
             placeholder="Username"
