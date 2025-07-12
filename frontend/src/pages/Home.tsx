@@ -41,7 +41,7 @@ export default function Home() {
           <br />
           Join the skill barter revolution today!
         </Subtitle>
-        <Link to="/register" style={{ marginRight: "1rem", textDecoration: "none" }}>
+        <Link to="/skills" style={{ marginRight: "1rem", textDecoration: "none" }}>
           <Button>
             Get Started
           </Button>

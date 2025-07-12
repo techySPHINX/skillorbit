@@ -1,12 +1,46 @@
 import { api } from "./axios";
 
-export const register = (data: {
+export interface RegisterData {
   username: string;
   email: string;
   password: string;
-}) => api.post("/auth/register", data);
+}
 
-export const login = (email: string, password: string) =>
-  api.post("/auth/login", { email, password });
+export interface AuthResponse {
+  token: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
+}
 
-export const fetchMe = () => api.get("/auth/me");
+export const register = async (data: RegisterData): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>("/auth/register", data);
+  return response.data;
+};
+
+export const login = async (
+  email: string,
+  password: string
+): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>("/auth/login", {
+    email,
+    password,
+  });
+  return response.data;
+};
+
+export interface MeResponse {
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    roles?: string[];
+  };
+}
+
+export const fetchMe = async (): Promise<MeResponse> => {
+  const response = await api.get<MeResponse>("/auth/me");
+  return response.data;
+};
