@@ -52,3 +52,8 @@
 {"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:13:23.801Z"}
 {"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:13:24.146Z"}
 {"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:13:37.913Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T10:16:18.419Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T10:16:18.427Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:16:19.609Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:16:19.974Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:16:35.096Z"}
