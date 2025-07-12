@@ -19,6 +19,13 @@ transporter.verify((error, success) => {
   }
 })
 
+/**
+ * Sends an email using configured transporter.
+ * @param to Recipient email address
+ * @param subject Email subject
+ * @param html HTML body content
+ * @param text Optional plain text fallback
+ */
 export const sendEmail = async (
   to: string,
   subject: string,
@@ -28,21 +35,27 @@ export const sendEmail = async (
   try {
     if (!to || !subject || !html) {
       throw new Error(
-        'To, subject, and html content are required to send email.'
+        'Missing required email fields: to, subject, and html content.'
       )
     }
 
-    await transporter.sendMail({
-      from: `"Skill Barter" <${process.env.EMAIL_FROM}>`,
+    const from = process.env.EMAIL_FROM
+    if (!from) {
+      throw new Error('EMAIL_FROM is not configured in environment.')
+    }
+
+    const mailOptions = {
+      from: `"Skill Barter" <${from}>`,
       to,
       subject,
       html,
-      text, 
-    })
+      text: text || html.replace(/<[^>]*>?/gm, ''), 
+    }
 
-    logger.info(`Email sent to ${to} with subject: ${subject}`)
+    await transporter.sendMail(mailOptions)
+    logger.info(`Email sent to ${to} with subject: "${subject}"`)
   } catch (error) {
     logger.error(`Failed to send email to ${to}:`, error)
-    throw error
+    throw new Error('Email sending failed.')
   }
 }

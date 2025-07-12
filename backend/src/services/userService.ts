@@ -1,10 +1,11 @@
 import User, { IUser } from '../models/User'
 import bcrypt from 'bcryptjs'
+import { logger } from '../config/logger'
 
 export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
   try {
-    if (!userData.email || !userData.passwordHash) {
-      throw new Error('Email and password are required.')
+    if (!userData.email || !userData.passwordHash || !userData.username) {
+      throw new Error('Username, email, and password are required.')
     }
 
     const existingUser = await User.findOne({ email: userData.email }).lean()
@@ -16,14 +17,18 @@ export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
     const passwordHash = await bcrypt.hash(userData.passwordHash, saltRounds)
 
     const user = new User({
-      ...userData,
+      username: userData.username,
+      email: userData.email,
       passwordHash,
+      roles: userData.roles || ['user'], 
     })
 
-    return await user.save()
+    const savedUser = await user.save()
+    logger.info(`User created: ${savedUser.email}`)
+    return savedUser
   } catch (error) {
-    console.error('Error creating user:', error)
-    throw error
+    logger.error('Error creating user:', error)
+    throw new Error('Failed to create user.')
   }
 }
 
@@ -32,10 +37,10 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
     if (!email) {
       throw new Error('Email is required.')
     }
-    return await User.findOne({ email }).lean()
+    return await User.findOne({ email })
   } catch (error) {
-    console.error('Error finding user by email:', error)
-    throw error
+    logger.error('Error finding user by email:', error)
+    throw new Error('Failed to find user by email.')
   }
 }
 
@@ -44,10 +49,10 @@ export const findUserById = async (id: string): Promise<IUser | null> => {
     if (!id) {
       throw new Error('User ID is required.')
     }
-    return await User.findById(id).lean()
+    return await User.findById(id)
   } catch (error) {
-    console.error('Error finding user by ID:', error)
-    throw error
+    logger.error('Error finding user by ID:', error)
+    throw new Error('Failed to find user by ID.')
   }
 }
 
@@ -63,10 +68,10 @@ export const updateUser = async (
       throw new Error('No update data provided.')
     }
 
-    return await User.findByIdAndUpdate(id, updateData, { new: true }).lean()
+    return await User.findByIdAndUpdate(id, updateData, { new: true })
   } catch (error) {
-    console.error('Error updating user:', error)
-    throw error
+    logger.error('Error updating user:', error)
+    throw new Error('Failed to update user.')
   }
 }
 
@@ -75,14 +80,10 @@ export const banUser = async (id: string): Promise<IUser | null> => {
     if (!id) {
       throw new Error('User ID is required.')
     }
-    return await User.findByIdAndUpdate(
-      id,
-      { isBanned: true },
-      { new: true }
-    ).lean()
+    return await User.findByIdAndUpdate(id, { isBanned: true }, { new: true })
   } catch (error) {
-    console.error('Error banning user:', error)
-    throw error
+    logger.error('Error banning user:', error)
+    throw new Error('Failed to ban user.')
   }
 }
 
@@ -91,13 +92,9 @@ export const unbanUser = async (id: string): Promise<IUser | null> => {
     if (!id) {
       throw new Error('User ID is required.')
     }
-    return await User.findByIdAndUpdate(
-      id,
-      { isBanned: false },
-      { new: true }
-    ).lean()
+    return await User.findByIdAndUpdate(id, { isBanned: false }, { new: true })
   } catch (error) {
-    console.error('Error unbanning user:', error)
-    throw error
+    logger.error('Error unbanning user:', error)
+    throw new Error('Failed to unban user.')
   }
 }

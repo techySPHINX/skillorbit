@@ -7,10 +7,18 @@ export const getUsers = async (
   options: Record<string, any> = {}
 ): Promise<any[]> => {
   try {
-    return await User.find(filter, null, options).lean().exec()
+    const allowedFilters = ['role', 'isBanned', 'username', 'email']
+    const sanitizedFilter: Record<string, any> = {}
+    for (const key of allowedFilters) {
+      if (filter[key] !== undefined) {
+        sanitizedFilter[key] = filter[key]
+      }
+    }
+
+    return await User.find(sanitizedFilter, null, options).lean().exec()
   } catch (error) {
     logger.error('Error getting users:', error)
-    throw error
+    throw new Error('Failed to get users.')
   }
 }
 
@@ -35,7 +43,7 @@ export const banUserById = async (
     logger.info(`User ${userId} banned by admin ${adminId}`)
   } catch (error) {
     logger.error('Error banning user:', error)
-    throw error
+    throw new Error('Failed to ban user.')
   }
 }
 
@@ -60,7 +68,7 @@ export const unbanUserById = async (
     logger.info(`User ${userId} unbanned by admin ${adminId}`)
   } catch (error) {
     logger.error('Error unbanning user:', error)
-    throw error
+    throw new Error('Failed to unban user.')
   }
 }
 
@@ -69,11 +77,11 @@ export const getAdminLogs = async (
 ): Promise<any[]> => {
   try {
     return await AdminLog.find(filter)
-      .populate('performedBy targetUser', 'username')
+      .populate('performedBy targetUser', 'username email') 
       .lean()
       .exec()
   } catch (error) {
     logger.error('Error getting admin logs:', error)
-    throw error
+    throw new Error('Failed to get admin logs.')
   }
 }

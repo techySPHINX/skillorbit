@@ -5,22 +5,27 @@ export const createFeedback = async (
   feedbackData: Partial<IFeedback>
 ): Promise<IFeedback> => {
   try {
-    if (
-      !feedbackData.fromUser ||
-      !feedbackData.toUser ||
-      !feedbackData.comment ||
-      !feedbackData.rating
-    ) {
+    const { fromUser, toUser, comment, rating } = feedbackData
+
+    if (!fromUser || !toUser || !comment || !rating) {
       throw new Error(
         'fromUser, toUser, comment, and rating are required for feedback.'
       )
     }
 
-    const feedback = new Feedback(feedbackData)
-    return await feedback.save()
+    const feedback = new Feedback({
+      fromUser,
+      toUser,
+      comment,
+      rating,
+    })
+
+    const savedFeedback = await feedback.save()
+    logger.info(`Feedback created from ${fromUser} to ${toUser}`)
+    return savedFeedback
   } catch (error) {
     logger.error('Error creating feedback:', error)
-    throw error
+    throw new Error('Failed to create feedback.')
   }
 }
 
@@ -38,6 +43,6 @@ export const getFeedbackForUser = async (
       .exec()
   } catch (error) {
     logger.error('Error getting feedback for user:', error)
-    throw error
+    throw new Error('Failed to get feedback for user.')
   }
 }

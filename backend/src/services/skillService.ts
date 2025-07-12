@@ -1,24 +1,29 @@
 import { FilterQuery } from 'mongoose'
 import Skill, { ISkill } from '../models/Skill'
+import { logger } from '../config/logger'
 
 export const createSkill = async (
   skillData: Partial<ISkill>
 ): Promise<ISkill> => {
   try {
-    if (!skillData.name || !skillData.createdBy) {
+    const { name, createdBy } = skillData
+
+    if (!name || !createdBy) {
       throw new Error('Skill name and createdBy are required.')
     }
 
-    const existingSkill = await Skill.findOne({ name: skillData.name }).lean()
+    const existingSkill = await Skill.findOne({ name }).lean()
     if (existingSkill) {
       throw new Error('Skill with this name already exists.')
     }
 
     const skill = new Skill(skillData)
-    return await skill.save()
+    const savedSkill = await skill.save()
+    logger.info(`Skill created: ${name} by user ${createdBy}`)
+    return savedSkill
   } catch (error) {
-    console.error('Error creating skill:', error)
-    throw error
+    logger.error('Error creating skill:', error)
+    throw new Error('Failed to create skill.')
   }
 }
 
@@ -31,8 +36,8 @@ export const getSkills = async (
       .lean()
       .exec()
   } catch (error) {
-    console.error('Error getting skills:', error)
-    throw error
+    logger.error('Error getting skills:', error)
+    throw new Error('Failed to get skills.')
   }
 }
 
@@ -42,10 +47,16 @@ export const deleteSkill = async (skillId: string): Promise<ISkill | null> => {
       throw new Error('Skill ID is required.')
     }
 
-    return await Skill.findByIdAndDelete(skillId).lean().exec()
+    const deleted = await Skill.findByIdAndDelete(skillId).lean().exec()
+    if (!deleted) {
+      throw new Error('Skill not found.')
+    }
+
+    logger.info(`Skill deleted: ${skillId}`)
+    return deleted
   } catch (error) {
-    console.error('Error deleting skill:', error)
-    throw error
+    logger.error('Error deleting skill:', error)
+    throw new Error('Failed to delete skill.')
   }
 }
 
@@ -57,7 +68,7 @@ export const findSkillByName = async (name: string): Promise<ISkill | null> => {
 
     return await Skill.findOne({ name }).lean().exec()
   } catch (error) {
-    console.error('Error finding skill by name:', error)
-    throw error
+    logger.error('Error finding skill by name:', error)
+    throw new Error('Failed to find skill by name.')
   }
 }

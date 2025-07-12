@@ -5,10 +5,12 @@ import { logger } from '../config/logger'
 
 export const getUserCount = async (): Promise<number> => {
   try {
-    return await User.countDocuments()
+    const count = await User.countDocuments()
+    logger.info(`Total users: ${count}`)
+    return count
   } catch (error) {
     logger.error('Error getting user count:', error)
-    throw error
+    throw new Error('Failed to get user count.')
   }
 }
 
@@ -17,18 +19,16 @@ export const getSwapStats = async (): Promise<{
   completed: number
 }> => {
   try {
-    const totalPromise = Swap.countDocuments()
-    const completedPromise = Swap.countDocuments({ status: 'completed' })
-
     const [total, completed] = await Promise.all([
-      totalPromise,
-      completedPromise,
+      Swap.countDocuments(),
+      Swap.countDocuments({ status: 'completed' }),
     ])
 
+    logger.info(`Swap stats fetched: total=${total}, completed=${completed}`)
     return { total, completed }
   } catch (error) {
     logger.error('Error getting swap stats:', error)
-    throw error
+    throw new Error('Failed to get swap statistics.')
   }
 }
 
@@ -43,9 +43,10 @@ export const getPopularSkills = async (
       { $project: { _id: 0, name: '$_id', count: 1 } },
     ])
 
+    logger.info(`Fetched top ${limit} popular skills.`)
     return popularSkills
   } catch (error) {
     logger.error('Error getting popular skills:', error)
-    throw error
+    throw new Error('Failed to get popular skills.')
   }
 }
