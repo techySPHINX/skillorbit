@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import useAppSelector from "../../hooks/useAppSelector";
 import { loginUser } from "../../store/authSlice";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
