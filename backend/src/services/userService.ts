@@ -2,25 +2,29 @@ import User, { IUser } from '../models/User'
 import bcrypt from 'bcryptjs'
 import { logger } from '../config/logger'
 
-export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
+export const createUser = async (
+  username: string,
+  email: string,
+  password: string
+): Promise<IUser> => {
   try {
-    if (!userData.email || !userData.passwordHash || !userData.username) {
+    if (!username || !email || !password) {
       throw new Error('Username, email, and password are required.')
     }
 
-    const existingUser = await User.findOne({ email: userData.email }).lean()
+    const existingUser = await User.findOne({ email }).lean()
     if (existingUser) {
       throw new Error('User with this email already exists.')
     }
 
     const saltRounds = 10
-    const passwordHash = await bcrypt.hash(userData.passwordHash, saltRounds)
+    const passwordHash = await bcrypt.hash(password, saltRounds)
 
     const user = new User({
-      username: userData.username,
-      email: userData.email,
+      username,
+      email,
       passwordHash,
-      roles: userData.roles || ['user'], 
+      roles: ['user'], 
     })
 
     const savedUser = await user.save()
@@ -86,6 +90,7 @@ export const banUser = async (id: string): Promise<IUser | null> => {
     throw new Error('Failed to ban user.')
   }
 }
+
 
 export const unbanUser = async (id: string): Promise<IUser | null> => {
   try {

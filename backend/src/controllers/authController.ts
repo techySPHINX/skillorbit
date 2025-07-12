@@ -19,7 +19,7 @@ export const register = async (
       return res.status(409).json({ message: 'Email already registered' })
     }
 
-    const user = await createUser({ username, email, passwordHash: password })
+    const user = await createUser(username, email, password)
     res.status(201).json({
       message: 'Registration successful',
       user: { id: user._id, username: user.username, email: user.email },
