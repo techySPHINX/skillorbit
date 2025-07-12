@@ -17,7 +17,18 @@ const skillSchema = Joi.object({
   description: Joi.string().max(256),
 })
 
+/**
+ * @route GET /skills
+ * @desc Get all skills
+ * @access Public
+ */
 router.get('/', listSkills)
+
+/**
+ * @route POST /skills
+ * @desc Add a new skill
+ * @access Authenticated users
+ */
 router.post(
   '/',
   authenticate,
@@ -25,6 +36,12 @@ router.post(
   validateBody(skillSchema),
   addSkill
 )
+
+/**
+ * @route DELETE /skills/:id
+ * @desc Delete a skill by ID
+ * @access Admin only
+ */
 router.delete('/:id', authenticate, requireRole('admin'), removeSkill)
 
 export default router
