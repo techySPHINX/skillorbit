@@ -1,0 +1,21 @@
+import styled from "styled-components";
+import { ReactNode } from "react";
+
+const Alert = styled.div`
+  background: #ffeaea;
+  color: #e53e3e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+  border: 1px solid #ffd6d6;
+`;
+
+type ErrorAlertProps = {
+  children: ReactNode;
+};
+
+export default function ErrorAlert({ children }: ErrorAlertProps) {
+  return <Alert>{children}</Alert>;
+}
