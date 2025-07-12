@@ -1,5 +1,3 @@
-// src/jobs/notificationJob.ts
-
 import { logger } from '../config/logger'
 import { Notification, User } from '../models'
 
@@ -11,7 +9,6 @@ export const runNotificationJob = async () => {
   try {
     const users = await User.find({ isBanned: false })
     for (const user of users) {
-      // Example: create a periodic notification
       await Notification.create({
         user: user._id,
         type: 'reminder',
