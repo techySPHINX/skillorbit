@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchMe, login, register } from "../api/auth";
+import { AxiosError } from "axios";
 
 interface User {
   _id: string;
@@ -13,15 +14,16 @@ interface AuthState {
   error: string | null;
 }
 
-export const fetchUser = createAsyncThunk<User>(
+export const fetchUser = createAsyncThunk<User, void, { rejectValue: string }>(
   "auth/fetchUser",
   async (_, thunkAPI) => {
     try {
       const res = await fetchMe();
       return res.data.user;
-    } catch (err: unknown) {
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
       return thunkAPI.rejectWithValue(
-        (err as any).response?.data?.message || "Failed to fetch user"
+        error.response?.data?.message || "Failed to fetch user"
       );
     }
   }
@@ -35,9 +37,10 @@ export const loginUser = createAsyncThunk<
   try {
     const res = await login(email, password);
     return res.data.user;
-  } catch (err: unknown) {
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      (err as any).response?.data?.message || "Login failed"
+      error.response?.data?.message || "Login failed"
     );
   }
 });
@@ -50,9 +53,10 @@ export const registerUser = createAsyncThunk<
   try {
     const res = await register(data);
     return res.data.user;
-  } catch (err: unknown) {
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      (err as any).response?.data?.message || "Registration failed"
+      error.response?.data?.message || "Registration failed"
     );
   }
 });
