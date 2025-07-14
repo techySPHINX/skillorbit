@@ -6,10 +6,10 @@ const spin = keyframes`
 
 const Spinner = styled.div`
   display: inline-block;
-  width: 36px;
-  height: 36px;
-  border: 4px solid #e3e3e3;
-  border-top: 4px solid #4f8cff;
+  width: ${({ theme }) => theme.spacing.xl};
+  height: ${({ theme }) => theme.spacing.xl};
+  border: 4px solid ${({ theme }) => theme.colors.lightGray};
+  border-top: 4px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   animation: ${spin} 0.9s linear infinite;
 `;

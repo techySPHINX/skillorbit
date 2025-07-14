@@ -3,18 +3,23 @@ import type { InputHTMLAttributes } from "react";
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1.2rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #fafbfc;
-  transition: border-color 0.2s;
+  padding: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.lightGray};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+  background: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.darkGray};
+  transition: ${({ theme }) => theme.transitions.easeOut};
 
   &:focus {
-    border-color: #4f8cff;
+    border-color: ${({ theme }) => theme.colors.primary};
     outline: none;
-    background: #fff;
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.primary};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray};
   }
 `;
 

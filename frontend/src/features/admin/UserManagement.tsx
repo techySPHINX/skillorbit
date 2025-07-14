@@ -2,60 +2,177 @@ import { useEffect, useState } from "react";
 import { fetchUsers, banUser, unbanUser } from "../../api/admin";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
+import Card from "../../components/Card";
+import styled from "styled-components";
+import SectionTitle from "../../components/SectionTitle";
+import ErrorAlert from "../../components/ErrorAlert";
+
+const UserManagementContainer = styled(Card)`
+  padding: ${({ theme }) => theme.spacing.lg};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+
+  th,
+  td {
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    text-align: left;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  }
+
+  th {
+    background-color: ${({ theme }) => theme.colors.lightPink};
+    color: ${({ theme }) => theme.colors.darkGray};
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background-color: ${({ theme }) => theme.colors.lightGray};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    display: block;
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling for small screens */
+    white-space: nowrap;
+
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr {
+      border: 1px solid ${({ theme }) => theme.colors.lightGray};
+      margin-bottom: ${({ theme }) => theme.spacing.sm};
+      border-radius: ${({ theme }) => theme.borderRadius.md};
+    }
+
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+      text-align: right;
+
+      &:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: ${({ theme }) => theme.colors.darkGray};
+      }
+    }
+
+    td:nth-of-type(1):before { content: "Username:"; }
+    td:nth-of-type(2):before { content: "Email:"; }
+    td:nth-of-type(3):before { content: "Status:"; }
+    td:nth-of-type(4):before { content: "Action:"; }
+  }
+`;
+
+const StatusBadge = styled.span<{ banned: boolean }>`
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme, banned }) =>
+    banned ? theme.colors.red : theme.colors.green};
+`;
 
 export default function UserManagement() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers()
-      .then((users) => setUsers(users))
+      .then((data) => setUsers(data))
+      .catch((err) => {
+        console.error("Error fetching users:", err);
+        setError("Failed to load users. Please try again later.");
+      })
       .finally(() => setLoading(false));
   }, []);
 
   const handleBan = (id: string) => {
-    banUser(id).then(() =>
-      setUsers((users) =>
-        users.map((u) => (u._id === id ? { ...u, banned: true } : u))
+    banUser(id)
+      .then(() =>
+        setUsers((users) =>
+          users.map((u) => (u._id === id ? { ...u, banned: true } : u))
+        )
       )
-    );
+      .catch((err) => {
+        console.error("Error banning user:", err);
+        setError("Failed to ban user.");
+      });
   };
 
   const handleUnban = (id: string) => {
-    unbanUser(id).then(() =>
-      setUsers((users) =>
-        users.map((u) => (u._id === id ? { ...u, banned: false } : u))
+    unbanUser(id)
+      .then(() =>
+        setUsers((users) =>
+          users.map((u) => (u._id === id ? { ...u, banned: false } : u))
+        )
       )
-    );
+      .catch((err) => {
+        console.error("Error unbanning user:", err);
+        setError("Failed to unban user.");
+      });
   };
 
   return (
-    <div>
-      <h3>User Management</h3>
+    <UserManagementContainer>
+      <SectionTitle>User Management</SectionTitle>
+      {error && <ErrorAlert message={error} />}
       {loading ? (
         <Loader />
+      ) : users.length === 0 ? (
+        <p>No users found.</p>
       ) : (
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            marginTop: "1rem",
-          }}
-        >
+        <StyledTable>
           <thead>
-            <tr style={{ background: "#f2f6ff" }}>
+            <tr>
               <th>Username</th>
               <th>Email</th>
               <th>Status</th>
-              <th>Ban/Unban</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id} style={{ borderBottom: "1px solid #e2e8f0" }}>
+              <tr key={user._id}>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
-                <td>{user.banned ? "Banned" : "Active"}</td>
+                <td>
+                  <StatusBadge banned={user.banned}>
+                    {user.banned ? "Banned" : "Active"}
+                  </StatusBadge>
+                </td>
                 <td>
                   {user.banned ? (
                     <Button
@@ -65,14 +182,19 @@ export default function UserManagement() {
                       Unban
                     </Button>
                   ) : (
-                    <Button onClick={() => handleBan(user._id)}>Ban</Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => handleBan(user._id)}
+                    >
+                      Ban
+                    </Button>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </StyledTable>
       )}
-    </div>
+    </UserManagementContainer>
   );
 }

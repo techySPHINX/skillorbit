@@ -1,24 +1,68 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import type { ButtonHTMLAttributes } from "react";
 
-const StyledButton = styled.button<{ variant?: "primary" | "secondary" }>`
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  background: ${({ variant }) =>
-    variant === "secondary" ? "#fff" : "#4f8cff"};
-  color: ${({ variant }) => (variant === "secondary" ? "#4f8cff" : "#fff")};
-  border: ${({ variant }) =>
-    variant === "secondary" ? "2px solid #4f8cff" : "none"};
-  transition: background 0.2s, color 0.2s;
+const variantStyles = {
+  primary: css`
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
+    border: none;
+    box-shadow: ${({ theme }) => theme.shadows.sm};
 
-  &:hover {
-    background: ${({ variant }) =>
-      variant === "secondary" ? "#f2f6ff" : "#2456c8"};
-    color: ${({ variant }) => (variant === "secondary" ? "#2456c8" : "#fff")};
+    &:hover:not(:disabled) {
+      background: #c2185b; /* A slightly darker pink for hover */
+      box-shadow: ${({ theme }) => theme.shadows.md};
+    }
+    &:focus-visible:not(:disabled) {
+      outline: 2px solid ${({ theme }) => theme.colors.primary};
+      outline-offset: 2px;
+      border-radius: ${({ theme }) => theme.borderRadius.sm};
+    }
+  `,
+  secondary: css`
+    background: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.primary};
+    border: 2px solid ${({ theme }) => theme.colors.primary};
+    box-shadow: ${({ theme }) => theme.shadows.sm};
+
+    &:hover:not(:disabled) {
+      background: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.white};
+      box-shadow: ${({ theme }) => theme.shadows.md};
+    }
+    &:focus-visible:not(:disabled) {
+      outline: 2px solid ${({ theme }) => theme.colors.primary};
+      outline-offset: 2px;
+      border-radius: ${({ theme }) => theme.borderRadius.sm};
+    }
+  `,
+};
+
+const disabledStyles = css`
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: ${({ theme }) => theme.colors.lightGray};
+  color: ${({ theme }) => theme.colors.gray};
+  border-color: ${({ theme }) => theme.colors.gray};
+`;
+
+const StyledButton = styled.button<{ variant?: "primary" | "secondary" }>`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  font-weight: 600;
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transitions.easeOut};
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+
+  ${({ variant = "primary" }) => variantStyles[variant]}
+
+  &:disabled {
+    ${disabledStyles}
   }
 `;
 

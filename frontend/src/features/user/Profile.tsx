@@ -5,26 +5,79 @@ import styled from "styled-components";
 import SectionTitle from "../../components/SectionTitle";
 import Loader from "../../components/Loader";
 import Avatar from "../../components/Avatar";
+import PageContainer from "../../components/PageContainer";
+import Button from "../../components/Button";
 
-const Section = styled.section`
-  background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-  min-height: 100vh;
-  padding: 3rem 0;
-`;
-
-const Container = styled.div`
-  max-width: 700px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(60, 72, 88, 0.09);
-  padding: 2.5rem 2rem;
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  padding: ${({ theme }) => theme.spacing.xl};
+  max-width: 800px;
+  margin: ${({ theme }) => theme.spacing.xl} auto;
   text-align: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: ${({ theme }) => theme.spacing.lg};
+    margin: ${({ theme }) => theme.spacing.lg} auto;
+  }
 `;
 
-const Info = styled.div`
-  color: #607d8b;
-  margin-bottom: 0.7rem;
+const ProfileHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  padding-bottom: ${({ theme }) => theme.spacing.lg};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  width: 100%;
+`;
+
+const ProfileAvatarWrapper = styled.div`
+  position: relative;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  border: 3px solid ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  padding: 4px;
+  display: inline-block;
+`;
+
+const ProfileInfoGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${({ theme }) => theme.spacing.md};
+  width: 100%;
+  text-align: left;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+`;
+
+const InfoItem = styled.div`
+  background-color: ${({ theme }) => theme.colors.lightPink};
+  padding: ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+
+  strong {
+    color: ${({ theme }) => theme.colors.darkGray};
+    font-size: ${({ theme }) => theme.fontSizes.medium};
+    display: block;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.gray};
+    font-size: ${({ theme }) => theme.fontSizes.small};
+  }
+`;
+
+const EditButtonContainer = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.xl};
+  width: 100%;
 `;
 
 export default function Profile() {
@@ -41,23 +94,51 @@ export default function Profile() {
 
   if (loading)
     return (
-      <Section>
+      <PageContainer>
         <Loader />
-      </Section>
+      </PageContainer>
     );
-  if (!user) return <Section>User not found.</Section>;
+  if (!user) return <PageContainer>User not found.</PageContainer>;
 
   return (
-    <Section>
-      <Container>
-        <Avatar src={user.profilePhoto} alt={user.username} size={96} />
-        <SectionTitle>{user.username}</SectionTitle>
-        <Info>Email: {user.email}</Info>
-        <Info>Location: {user.location || "N/A"}</Info>
-        <Info>Skills Offered: {user.skillsOffered?.join(", ") || "N/A"}</Info>
-        <Info>Skills Wanted: {user.skillsWanted?.join(", ") || "N/A"}</Info>
-        <Info>Availability: {user.availability || "N/A"}</Info>
-      </Container>
-    </Section>
+    <PageContainer>
+      <ProfileContainer>
+        <ProfileHeader>
+          <ProfileAvatarWrapper>
+            <Avatar src={user.profilePhoto || `https://via.placeholder.com/96/e75480/ffffff?text=${user.username.charAt(0)}`} alt={user.username} size={96} />
+          </ProfileAvatarWrapper>
+          <SectionTitle>{user.username}</SectionTitle>
+        </ProfileHeader>
+
+        <ProfileInfoGrid>
+          <InfoItem>
+            <strong>Email</strong>
+            <span>{user.email}</span>
+          </InfoItem>
+          <InfoItem>
+            <strong>Location</strong>
+            <span>{user.location || "N/A"}</span>
+          </InfoItem>
+          <InfoItem>
+            <strong>Skills Offered</strong>
+            <span>{user.skillsOffered?.join(", ") || "N/A"}</span>
+          </InfoItem>
+          <InfoItem>
+            <strong>Skills Wanted</strong>
+            <span>{user.skillsWanted?.join(", ") || "N/A"}</span>
+          </InfoItem>
+          <InfoItem>
+            <strong>Availability</strong>
+            <span>{user.availability || "N/A"}</span>
+          </InfoItem>
+        </ProfileInfoGrid>
+
+        <EditButtonContainer>
+          <Button variant="primary" onClick={() => alert("Edit Profile functionality coming soon!")}>
+            Edit Profile
+          </Button>
+        </EditButtonContainer>
+      </ProfileContainer>
+    </PageContainer>
   );
 }

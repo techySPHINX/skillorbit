@@ -2,10 +2,10 @@ import styled from "styled-components";
 import type { ReactNode } from "react";
 
 const Title = styled.h2`
-  color: #2d3748;
-  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.darkGray};
+  font-size: ${({ theme }) => theme.fontSizes.xxLarge};
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
   text-align: center;
 `;
 

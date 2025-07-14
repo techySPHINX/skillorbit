@@ -9,10 +9,12 @@ import AdminDashboardPage from "../pages/AdminDashboard";
 import NotFound from "../pages/NotFound";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
+import Navbar from "../components/Navbar";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
 

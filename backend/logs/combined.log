@@ -57,3 +57,70 @@
 {"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T10:16:19.609Z"}
 {"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T10:16:19.974Z"}
 {"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T10:16:35.096Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T11:27:03.426Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T11:27:03.433Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T11:27:04.223Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T11:27:05.052Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T11:35:25.629Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T11:35:41.529Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T11:35:41.535Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T11:35:42.327Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T11:35:43.118Z"}
+{"level":"info","message":"User created: hottadr@gmail.com","timestamp":"2025-07-12T11:35:47.870Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:35:47 +0000] \"POST /api/auth/register HTTP/1.1\" 201 125 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:35:47.875Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:35:53 +0000] \"POST /api/auth/register HTTP/1.1\" 409 38 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:35:53.036Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:36:08 +0000] \"POST /api/auth/login HTTP/1.1\" 401 33 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:36:08.949Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:36:12 +0000] \"POST /api/auth/login HTTP/1.1\" 401 33 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:36:12.800Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:37:57 +0000] \"POST /api/auth/login HTTP/1.1\" 401 33 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:37:57.322Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:38:19 +0000] \"POST /api/auth/register HTTP/1.1\" 400 157 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:38:19.196Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:38:36 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:38:36.951Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:38:37 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:38:37.839Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:38:38 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:38:38.374Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T11:39:20.053Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T11:50:21.229Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T11:50:21.236Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T11:50:21.901Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T11:50:22.789Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:50:51 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:50:51.609Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:51:11 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:51:11.219Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:51:34 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:51:34.204Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:51:44 +0000] \"POST /api/auth/register HTTP/1.1\" 400 100 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:51:44.125Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T11:59:15.180Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T11:59:22.886Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T11:59:22.893Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T11:59:23.609Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T11:59:24.403Z"}
+{"level":"info","message":"User created: shimon123universe@gmail.com","timestamp":"2025-07-12T11:59:49.527Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:59:49 +0000] \"POST /api/auth/register HTTP/1.1\" 201 135 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:59:49.535Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:11:59:55 +0000] \"POST /api/auth/register HTTP/1.1\" 409 38 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T11:59:55.457Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:12:00:10 +0000] \"POST /api/auth/login HTTP/1.1\" 200 303 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T12:00:10.610Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:12:00:14 +0000] \"POST /api/auth/login HTTP/1.1\" 200 303 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T12:00:14.291Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:12:00:39 +0000] \"POST /api/auth/login HTTP/1.1\" 200 303 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T12:00:39.783Z"}
+{"level":"warn","message":"MongoDB disconnected","timestamp":"2025-07-12T12:09:03.083Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T12:09:13.336Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T12:19:59.290Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T12:19:59.334Z"}
+{"level":"warn","message":"MongoDB disconnected","timestamp":"2025-07-12T12:20:09.531Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T12:20:09.582Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:12:20:55 +0000] \"POST /api/auth/login HTTP/1.1\" 200 303 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T12:20:55.497Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T12:24:07.022Z"}
+{"level":"info","message":"Socket.IO server initialized and ready.","timestamp":"2025-07-12T17:25:41.499Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-07-12T17:25:41.508Z"}
+{"level":"info","message":"Email transporter is configured and ready.","timestamp":"2025-07-12T17:26:00.300Z"}
+{"level":"info","message":"MongoDB connected","timestamp":"2025-07-12T17:26:04.154Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:26:57 +0000] \"POST /api/auth/login HTTP/1.1\" 200 303 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:26:57.515Z"}
+{"level":"warn","message":"MongoDB disconnected","timestamp":"2025-07-12T17:27:52.950Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T17:28:24.979Z"}
+{"level":"info","message":"User created: jk5222404@gmail.com","timestamp":"2025-07-12T17:35:02.222Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:35:02 +0000] \"POST /api/auth/register HTTP/1.1\" 201 129 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:35:02.226Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:49:33 +0000] \"GET /api/skills HTTP/1.1\" 200 13 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:49:33.810Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:49:33 +0000] \"GET /api/skills HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:49:33.917Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:51:19 +0000] \"GET /api/swaps HTTP/1.1\" 401 37 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:51:19.683Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:51:19 +0000] \"GET /api/swaps HTTP/1.1\" 401 37 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:51:19.688Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:52:05 +0000] \"GET /api/notifications HTTP/1.1\" 401 37 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:52:05.574Z"}
+{"level":"info","message":"::1 - - [12/Jul/2025:17:52:05 +0000] \"GET /api/notifications HTTP/1.1\" 401 37 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0\"","timestamp":"2025-07-12T17:52:05.578Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T18:02:38.769Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T18:02:38.774Z"}
+{"level":"warn","message":"MongoDB disconnected","timestamp":"2025-07-12T18:02:49.348Z"}
+{"level":"info","message":"MongoDB reconnected","timestamp":"2025-07-12T18:02:49.734Z"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server and MongoDB connection.","timestamp":"2025-07-12T18:30:29.324Z"}

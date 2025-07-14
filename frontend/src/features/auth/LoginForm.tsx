@@ -1,15 +1,76 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import styled from "styled-components";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { loginUser } from "../../store/authSlice";
-import Card from "../../components/Card";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import ErrorAlert from "../../components/ErrorAlert";
 import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import SectionTitle from "../../components/SectionTitle";
+
+const AuthContainer = styled.div`
+  display: flex;
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: column;
+    max-width: 420px;
+  }
+`;
+
+const AuthImage = styled.div`
+  flex: 1;
+  background: url('/path/to/your/login-image.jpg') no-repeat center center;
+  background-size: cover;
+  min-height: 300px; /* Ensure image is visible on small screens */
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    min-height: 500px; /* Adjust height for larger screens */
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none; /* Hide image on smaller screens if preferred */
+  }
+`;
+
+const AuthFormWrapper = styled.div`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing.xl};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.md};
+    margin-top: ${({ theme }) => theme.spacing.lg};
+  }
+
+  .login-btn {
+    margin-top: ${({ theme }) => theme.spacing.md};
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.primary};
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: ${({ theme }) => theme.spacing.md};
+  text-align: center;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 export default function LoginForm() {
   const dispatch = useAppDispatch();
@@ -31,29 +92,33 @@ export default function LoginForm() {
 
   return (
     <PageContainer>
-      <Card>
-        <SectionTitle>Sign In</SectionTitle>
-        {error && <ErrorAlert>{error}</ErrorAlert>}
-        <form onSubmit={handleLogin}>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? <Loader /> : "Sign In"}
-          </Button>
-        </form>
-      </Card>
+      <AuthContainer>
+        <AuthImage style={{ backgroundImage: `url('https://via.placeholder.com/450x500/e75480/ffffff?text=Login+Image')` }} />
+        <AuthFormWrapper>
+          <SectionTitle>Sign In</SectionTitle>
+          {error && <ErrorAlert message={error} />}
+          <form onSubmit={handleLogin}>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button className="login-btn" type="submit" disabled={loading}>
+              {loading ? <Loader /> : "Sign In"}
+            </Button>
+          </form>
+          <StyledLink to="/register">Don't have an account? Register here.</StyledLink>
+        </AuthFormWrapper>
+      </AuthContainer>
     </PageContainer>
   );
 }

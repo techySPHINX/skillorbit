@@ -1,21 +1,20 @@
 import styled from "styled-components";
-import type { ReactNode } from "react";
 
 const Alert = styled.div`
-  background: #ffeaea;
-  color: #e53e3e;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  background: rgba(229, 62, 62, 0.1);
+  color: ${({ theme }) => theme.colors.red};
+  padding: ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
   text-align: center;
   font-weight: 500;
-  border: 1px solid #ffd6d6;
+  border: 1px solid ${({ theme }) => theme.colors.red};
 `;
 
 type ErrorAlertProps = {
-  children: ReactNode;
+  message: string;
 };
 
-export default function ErrorAlert({ children }: ErrorAlertProps) {
-  return <Alert>{children}</Alert>;
+export default function ErrorAlert({ message }: ErrorAlertProps) {
+  return <Alert>{message}</Alert>;
 }

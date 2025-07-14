@@ -1,32 +1,25 @@
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import Button from "../components/Button";
-
-const Bg = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+import PageContainer from "../components/PageContainer";
 
 const Container = styled.div`
-  background: #fff;
-  padding: 3rem 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(60, 72, 88, 0.09);
+  background: ${({ theme }) => theme.colors.white};
+  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
   text-align: center;
 `;
 
 const Title = styled.h2`
-  color: #e75480;
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.fontSizes.xxLarge};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 export default function NotFound() {
   return (
-    <Bg>
+    <PageContainer>
       <Container>
         <Title>404 - Page Not Found</Title>
         <p>Sorry, the page you are looking for does not exist.</p>
@@ -36,6 +29,7 @@ export default function NotFound() {
           </Button>
         </Link>
       </Container>
-    </Bg>
+    </PageContainer>
   );
 }
+
