@@ -1,17 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchNotifications } from "../api/notification";
+import { fetchNotifications, type Notification } from "../api/notification"; 
+
+interface NotificationState {
+  notifications: Notification[];
+  loading: boolean;
+}
+
+const initialState: NotificationState = {
+  notifications: [],
+  loading: false,
+};
 
 export const getNotifications = createAsyncThunk(
   "notifications/getNotifications",
   async () => {
     const res = await fetchNotifications();
-    return res.data.notifications;
+    return res.notifications;
   }
 );
 
 const notificationSlice = createSlice({
   name: "notifications",
-  initialState: { notifications: [], loading: false },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

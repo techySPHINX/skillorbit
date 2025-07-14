@@ -19,7 +19,12 @@ export const fetchUser = createAsyncThunk<User, void, { rejectValue: string }>(
   async (_, thunkAPI) => {
     try {
       const res = await fetchMe();
-      return res.data.user;
+      const user = res.user;
+      return {
+        _id: user._id ?? user.id,
+        username: user.username,
+        email: user.email,
+      };
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       return thunkAPI.rejectWithValue(
@@ -36,7 +41,12 @@ export const loginUser = createAsyncThunk<
 >("auth/loginUser", async ({ email, password }, thunkAPI) => {
   try {
     const res = await login(email, password);
-    return res.data.user;
+    const user = res.user;
+    return {
+      _id: user._id ?? user.id,
+      username: user.username,
+      email: user.email,
+    };
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
@@ -52,7 +62,7 @@ export const registerUser = createAsyncThunk<
 >("auth/registerUser", async (data, thunkAPI) => {
   try {
     const res = await register(data);
-    return res.data.user;
+    return res.user; 
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
@@ -60,6 +70,7 @@ export const registerUser = createAsyncThunk<
     );
   }
 });
+
 
 const authSlice = createSlice({
   name: "auth",

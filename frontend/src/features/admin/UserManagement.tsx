@@ -9,7 +9,7 @@ export default function UserManagement() {
 
   useEffect(() => {
     fetchUsers()
-      .then((res) => setUsers(res.data.users))
+      .then((users) => setUsers(users))
       .finally(() => setLoading(false));
   }, []);
 

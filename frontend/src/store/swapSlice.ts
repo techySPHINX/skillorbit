@@ -1,14 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchSwaps } from "../api/swap";
+import { fetchSwaps, type Swap } from "../api/swap"; 
 
 export const getSwaps = createAsyncThunk("swaps/getSwaps", async () => {
   const res = await fetchSwaps();
-  return res.data.swaps;
+  return res.swaps; 
 });
+
+interface SwapState {
+  swaps: Swap[];
+  loading: boolean;
+}
+
+const initialState: SwapState = {
+  swaps: [],
+  loading: false,
+};
 
 const swapSlice = createSlice({
   name: "swaps",
-  initialState: { swaps: [], loading: false },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

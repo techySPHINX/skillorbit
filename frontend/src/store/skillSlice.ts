@@ -1,14 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchSkills } from "../api/skill";
+import { fetchSkills, type Skill } from "../api/skill"; 
 
 export const getSkills = createAsyncThunk("skills/getSkills", async () => {
   const res = await fetchSkills();
-  return res.data.skills;
+  return res.skills;
 });
+
+interface SkillState {
+  skills: Skill[];
+  loading: boolean;
+}
+
+const initialState: SkillState = {
+  skills: [],
+  loading: false,
+};
 
 const skillSlice = createSlice({
   name: "skills",
-  initialState: { skills: [], loading: false },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

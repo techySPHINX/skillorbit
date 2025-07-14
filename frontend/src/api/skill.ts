@@ -15,6 +15,7 @@ export interface Skill {
 }
 
 export interface FetchSkillsResponse {
+  data: unknown;
   skills: Skill[];
 }
 

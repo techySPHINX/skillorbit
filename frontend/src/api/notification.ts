@@ -11,6 +11,7 @@ export interface Notification {
 }
 
 export interface FetchNotificationsResponse {
+  data: unknown;
   notifications: Notification[];
 }
 

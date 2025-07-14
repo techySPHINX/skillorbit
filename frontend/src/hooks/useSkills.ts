@@ -7,7 +7,10 @@ export function useSkills() {
 
   useEffect(() => {
     fetchSkills()
-      .then((res) => setSkills(res.data.skills))
+      .then((res) => {
+        const data = res.data as { skills: unknown[] };
+        setSkills(data.skills);
+      })
       .finally(() => setLoading(false));
   }, []);
 

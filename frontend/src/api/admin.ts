@@ -17,6 +17,7 @@ export interface User {
 }
 
 export interface AnalyticsReport {
+  data(data: unknown): void | PromiseLike<void>;
   userCount: number;
   swapStats: {
     total: number;

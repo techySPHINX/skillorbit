@@ -7,7 +7,10 @@ export function useNotifications() {
 
   useEffect(() => {
     fetchNotifications()
-      .then((res) => setNotifications(res.data.notifications))
+      .then((res) => {
+        const data = res.data as { notifications: unknown[] };
+        setNotifications(data.notifications);
+      })
       .finally(() => setLoading(false));
   }, []);
 

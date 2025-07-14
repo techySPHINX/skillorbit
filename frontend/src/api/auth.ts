@@ -9,6 +9,7 @@ export interface RegisterData {
 export interface AuthResponse {
   token: string;
   user: {
+    _id: string;
     id: string;
     username: string;
     email: string;
@@ -32,7 +33,9 @@ export const login = async (
 };
 
 export interface MeResponse {
+  data: unknown;
   user: {
+    _id: string;
     id: string;
     username: string;
     email: string;

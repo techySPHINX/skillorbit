@@ -8,7 +8,7 @@ export default function AdminLogs() {
 
   useEffect(() => {
     fetchAdminLogs()
-      .then((res) => setLogs(res.data.logs))
+      .then((res) => setLogs(res))
       .finally(() => setLoading(false));
   }, []);
 

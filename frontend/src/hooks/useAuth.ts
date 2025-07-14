@@ -7,7 +7,10 @@ export function useAuth() {
 
   useEffect(() => {
     fetchMe()
-      .then((res) => setUser(res.data.user))
+      .then((res) => {
+        const data = res.data as { user: unknown };
+        setUser(data.user);
+      })
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
