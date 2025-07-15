@@ -7,6 +7,8 @@ import Card from "../../components/Card";
 import ErrorAlert from "../../components/ErrorAlert";
 import { motion, easeOut } from "framer-motion";
 import { FaBell, FaCheckCircle } from "react-icons/fa";
+import Button from "../../components/Button";
+import { markNotificationRead } from "../../api/notification";
 
 const NotificationsContent = styled(motion.div)`
   max-width: 800px;
@@ -36,7 +38,6 @@ const NotificationGrid = styled(motion.div)`
   }
 `;
 
-
 const MotionCard = motion(Card);
 
 const NotificationCardStyled = styled(MotionCard)<{ read: boolean }>`
@@ -46,7 +47,8 @@ const NotificationCardStyled = styled(MotionCard)<{ read: boolean }>`
   gap: ${({ theme }) => theme.spacing.sm};
   text-align: left;
   min-height: 100px;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    background 0.3s ease-in-out;
   background: ${({ theme, read }) =>
     read
       ? `linear-gradient(145deg, ${theme.colors.white} 0%, ${theme.colors.lightGray} 100%)`
@@ -87,10 +89,17 @@ type Notification = {
 };
 
 export default function NotificationList() {
-  const { notifications, loading, error } = useNotifications() as {
-    notifications: Notification[];
-    loading: boolean;
-    error: string | null;
+  const { notifications, setNotifications, loading, error } = useNotifications();
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      const { notification } = await markNotificationRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n._id === id ? notification : n))
+      );
+    } catch (error) {
+      console.error("Failed to mark notification as read", error);
+    }
   };
 
   const containerVariants = {
@@ -114,7 +123,7 @@ export default function NotificationList() {
         {loading ? (
           <Loader />
         ) : error ? (
-          <ErrorAlert message={error} />
+          <ErrorAlert message={error as string} />
         ) : notifications.length === 0 ? (
           <p>No notifications.</p>
         ) : (
@@ -125,7 +134,7 @@ export default function NotificationList() {
               visible: { transition: { staggerChildren: 0.1 } },
             }}
           >
-            {notifications.map((n, index) => (
+            {notifications.map((n: Notification, index: number) => (
               <NotificationCardStyled
                 key={n._id}
                 read={n.isRead}
@@ -133,12 +142,21 @@ export default function NotificationList() {
                 transition={{ delay: index * 0.1 }}
               >
                 <NotificationMessage>
-                  {n.isRead ? <FaCheckCircle color="green" /> : <FaBell color="#e75480" />}
+                  {n.isRead ? (
+                    <FaCheckCircle color="green" />
+                  ) : (
+                    <FaBell color="#e75480" />
+                  )}
                   {n.message}
                 </NotificationMessage>
                 <NotificationTimestamp>
                   {new Date(n.createdAt).toLocaleString()}
                 </NotificationTimestamp>
+                {!n.isRead && (
+                  <Button onClick={() => handleMarkAsRead(n._id)}>
+                    Mark as Read
+                  </Button>
+                )}
               </NotificationCardStyled>
             ))}
           </NotificationGrid>

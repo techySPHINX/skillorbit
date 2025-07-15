@@ -10,6 +10,7 @@ import NotFound from "../pages/NotFound";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import Navbar from "../components/Navbar";
+import UserProfilePage from "../pages/UserProfile";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
         <Route path="/skills" element={<Skills />} />
         <Route path="/swaps" element={<SwapsPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/user/:id" element={<UserProfilePage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/feedback/user/:userId" element={<FeedbackPage />} />
 
@@ -35,3 +37,4 @@ export default function AppRoutes() {
     </BrowserRouter>
   );
 }
+

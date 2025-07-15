@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { api } from "../../api/axios";
+import {
+  fetchUserFeedback,
+  leaveFeedback,
+  type LeaveFeedbackData,
+} from "../../api/feedback";
 import styled from "styled-components";
 import SectionTitle from "../../components/SectionTitle";
 import Loader from "../../components/Loader";
@@ -8,6 +12,10 @@ import Card from "../../components/Card";
 import ErrorAlert from "../../components/ErrorAlert";
 import { motion } from "framer-motion";
 import { FaStar, FaUserCircle } from "react-icons/fa";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
+import Input from "../../components/Input";
+import Textarea from "../../components/Textarea";
 
 const FeedbackContent = styled(motion.div)`
   max-width: 800px;
@@ -44,14 +52,23 @@ const FeedbackCardBase = styled(Card)`
   gap: ${({ theme }) => theme.spacing.sm};
   text-align: left;
   min-height: 180px;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out;
-  background: linear-gradient(145deg, ${({ theme }) => theme.colors.white} 0%, ${({ theme }) => theme.colors.lightPink} 100%);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    background 0.3s ease-in-out;
+  background: linear-gradient(
+    145deg,
+    ${({ theme }) => theme.colors.white} 0%,
+    ${({ theme }) => theme.colors.lightPink} 100%
+  );
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
 
   &:hover {
     transform: translateY(-8px);
     box-shadow: ${({ theme }) => theme.shadows.lg};
-    background: linear-gradient(145deg, ${({ theme }) => theme.colors.lightPink} 0%, ${({ theme }) => theme.colors.white} 100%);
+    background: linear-gradient(
+      145deg,
+      ${({ theme }) => theme.colors.lightPink} 0%,
+      ${({ theme }) => theme.colors.white} 100%
+    );
   }
 `;
 
@@ -93,11 +110,17 @@ export default function FeedbackList({ userId }: { userId: string }) {
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLeaveFeedbackModalOpen, setLeaveFeedbackModalOpen] = useState(false);
+  const [formData, setFormData] = useState<LeaveFeedbackData>({
+    swap: "",
+    toUser: userId,
+    rating: 5,
+    comment: "",
+  });
 
   useEffect(() => {
-    api
-      .get(`/feedback/user/${userId}`)
-      .then((res) => setFeedbacks(res.data.feedbacks))
+    fetchUserFeedback(userId)
+      .then((res) => setFeedbacks(res.feedbacks))
       .catch((err) => {
         console.error("Error fetching feedback:", err);
         setError("Failed to load feedback. Please try again later.");
@@ -105,14 +128,39 @@ export default function FeedbackList({ userId }: { userId: string }) {
       .finally(() => setLoading(false));
   }, [userId]);
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLeaveFeedback = async () => {
+    try {
+      const newFeedback = await leaveFeedback(formData);
+      setFeedbacks((prev) => [...prev, newFeedback.feedback]);
+      setLeaveFeedbackModalOpen(false);
+    } catch (error) {
+      console.error("Failed to leave feedback", error);
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" as const },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" as const },
+    },
   };
 
   return (
@@ -123,6 +171,9 @@ export default function FeedbackList({ userId }: { userId: string }) {
         variants={containerVariants}
       >
         <SectionTitle>User Feedback</SectionTitle>
+        <Button onClick={() => setLeaveFeedbackModalOpen(true)}>
+          Leave Feedback
+        </Button>
         {loading ? (
           <Loader />
         ) : error ? (
@@ -144,15 +195,47 @@ export default function FeedbackList({ userId }: { userId: string }) {
                 transition={{ delay: index * 0.1 }}
               >
                 <FeedbackHeader>
-                  <FeedbackUser><FaUserCircle /> From: {fb.fromUser?.username || "Anonymous"}</FeedbackUser>
-                  <FeedbackRating>{fb.rating} <FaStar /></FeedbackRating>
+                  <FeedbackUser>
+                    <FaUserCircle /> From: {fb.fromUser?.username || "Anonymous"}
+                  </FeedbackUser>
+                  <FeedbackRating>
+                    {fb.rating} <FaStar />
+                  </FeedbackRating>
                 </FeedbackHeader>
-                <FeedbackComment>{fb.comment || "No comment provided."}</FeedbackComment>
+                <FeedbackComment>
+                  {fb.comment || "No comment provided."}
+                </FeedbackComment>
               </FeedbackCardStyled>
             ))}
           </FeedbackGrid>
         )}
       </FeedbackContent>
+      <Modal
+        isOpen={isLeaveFeedbackModalOpen}
+        onClose={() => setLeaveFeedbackModalOpen(false)}
+        title="Leave Feedback"
+      >
+        <Input
+          name="swap"
+          value={formData.swap}
+          onChange={handleInputChange}
+        />
+        <Input
+          name="rating"
+          type="number"
+          min={1}
+          max={5}
+          value={formData.rating}
+          onChange={handleInputChange}
+        />
+        <Textarea
+          label="Comment"
+          name="comment"
+          value={formData.comment || ""}
+          onChange={handleInputChange}
+        />
+        <Button onClick={handleLeaveFeedback}>Submit Feedback</Button>
+      </Modal>
     </PageContainer>
   );
 }

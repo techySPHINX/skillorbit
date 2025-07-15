@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import ErrorAlert from "../components/ErrorAlert";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaUserPlus } from "react-icons/fa";
+import ParallaxContainer from "../components/ParallaxContainer";
 
 const HeroSection = styled.section`
   background: linear-gradient(135deg, ${({ theme }) => theme.colors.lightPink} 0%, #f8e8ed 100%);
@@ -170,30 +171,32 @@ export default function Home() {
 
   return (
     <>
-      <HeroSection>
-        <HeroContent
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <HeroTitle>Unlock Your Potential with SkillOrbit</HeroTitle>
-          <HeroSubtitle>
-            Connect with a vibrant community to exchange knowledge, learn new skills, and grow together. Your journey to mastery starts here.
-          </HeroSubtitle>
-          <ButtonGroup>
-            <Link to="/skills" style={{ textDecoration: "none" }}>
-              <Button>
-                Explore Skills <FaArrowRight />
-              </Button>
-            </Link>
-            <Link to="/register" style={{ textDecoration: "none" }}>
-              <Button variant="secondary">
-                Join Now <FaUserPlus />
-              </Button>
-            </Link>
-          </ButtonGroup>
-        </HeroContent>
-      </HeroSection>
+      <ParallaxContainer imageUrl="https://via.placeholder.com/1920x1080.png/fdf6f9/2d3748?text=SkillOrbit+Background">
+        <HeroSection>
+          <HeroContent
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+          >
+            <HeroTitle>Unlock Your Potential with SkillOrbit</HeroTitle>
+            <HeroSubtitle>
+              Connect with a vibrant community to exchange knowledge, learn new skills, and grow together. Your journey to mastery starts here.
+            </HeroSubtitle>
+            <ButtonGroup>
+              <Link to="/skills" style={{ textDecoration: "none" }}>
+                <Button>
+                  Explore Skills <FaArrowRight />
+                </Button>
+              </Link>
+              <Link to="/register" style={{ textDecoration: "none" }}>
+                <Button variant="secondary">
+                  Join Now <FaUserPlus />
+                </Button>
+              </Link>
+            </ButtonGroup>
+          </HeroContent>
+        </HeroSection>
+      </ParallaxContainer>
 
       <SkillsSection>
         <SectionTitle>Discover Popular Skills</SectionTitle>

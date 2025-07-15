@@ -1,6 +1,12 @@
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../../api/axios";
+import {
+  getUserProfile,
+  updateUserProfile,
+  updateProfilePhoto,
+  UserProfile,
+} from "../../api/user";
 import styled from "styled-components";
 import SectionTitle from "../../components/SectionTitle";
 import Loader from "../../components/Loader";
@@ -10,6 +16,10 @@ import Button from "../../components/Button";
 import { motion, easeOut } from "framer-motion";
 import { FaEdit } from "react-icons/fa";
 import ErrorAlert from "../../components/ErrorAlert";
+import { useAuth } from "../../hooks/useAuth";
+import Modal from "../../components/Modal";
+import Input from "../../components/Input";
+import Textarea from "../../components/Textarea";
 
 const ProfileContainer = styled(motion.div)`
   display: flex;
@@ -85,29 +95,92 @@ const EditButtonContainer = styled.div`
 
 export default function Profile() {
   const { id } = useParams();
-  const [user, setUser] = useState<any>(null);
+  const { user: authUser } = useAuth();
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    location: "",
+    availability: "",
+    skillsOffered: "",
+    skillsWanted: "",
+  });
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
 
   useEffect(() => {
-    api
-      .get(`/users/${id}`)
-      .then((res) => setUser(res.data.user))
-      .catch((err) => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await getUserProfile(id!);
+        setUser(response.user);
+        setFormData({
+          username: response.user.username,
+          location: response.user.location || "",
+          availability: response.user.availability || "",
+          skillsOffered: response.user.skillsOffered?.join(", ") || "",
+          skillsWanted: response.user.skillsWanted?.join(", ") || "",
+        });
+      } catch (err) {
         console.error("Error fetching user profile:", err);
         setError("Failed to load user profile. Please try again later.");
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
   }, [id]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setProfilePhoto(e.target.files[0]);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      if (profilePhoto) {
+        await updateProfilePhoto(profilePhoto);
+      }
+
+      const updatedProfile = await updateUserProfile({
+        ...formData,
+        skillsOffered: formData.skillsOffered.split(",").map((s) => s.trim()),
+        skillsWanted: formData.skillsWanted.split(",").map((s) => s.trim()),
+      });
+
+      setUser(updatedProfile.user);
+      setEditModalOpen(false);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      setError("Failed to update profile. Please try again.");
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: easeOut },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: easeOut },
+    },
   };
 
   if (loading)
@@ -133,7 +206,16 @@ export default function Profile() {
       >
         <ProfileHeader>
           <ProfileAvatarWrapper>
-            <Avatar src={user.profilePhoto || `https://via.placeholder.com/96/e75480/ffffff?text=${user.username.charAt(0)}`} alt={user.username} size={96} />
+            <Avatar
+              src={
+                user.profilePhoto ||
+                `https://via.placeholder.com/96/e75480/ffffff?text=${user.username.charAt(
+                  0
+                )}`
+              }
+              alt={user.username}
+              size={96}
+            />
           </ProfileAvatarWrapper>
           <SectionTitle>{user.username}</SectionTitle>
         </ProfileHeader>
@@ -167,12 +249,58 @@ export default function Profile() {
           </InfoItem>
         </ProfileInfoGrid>
 
-        <EditButtonContainer>
-          <Button variant="primary" onClick={() => alert("Edit Profile functionality coming soon!")}>
-            <FaEdit /> Edit Profile
-          </Button>
-        </EditButtonContainer>
+        {authUser?._id === user.id && (
+          <EditButtonContainer>
+            <Button variant="primary" onClick={() => setEditModalOpen(true)}>
+              <FaEdit /> Edit Profile
+            </Button>
+          </EditButtonContainer>
+        )}
       </ProfileContainer>
+
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        title="Edit Profile"
+      >
+        <Input
+          label="Username"
+          name="username"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
+        <Input
+          label="Location"
+          name="location"
+          value={formData.location}
+          onChange={handleInputChange}
+        />
+        <Textarea
+          label="Availability"
+          name="availability"
+          value={formData.availability}
+          onChange={handleInputChange}
+        />
+        <Input
+          label="Skills Offered (comma-separated)"
+          name="skillsOffered"
+          value={formData.skillsOffered}
+          onChange={handleInputChange}
+        />
+        <Input
+          label="Skills Wanted (comma-separated)"
+          name="skillsWanted"
+          value={formData.skillsWanted}
+          onChange={handleInputChange}
+        />
+        <Input
+          label="Profile Photo"
+          type="file"
+          onChange={handleFileChange}
+        />
+        <Button onClick={handleSaveChanges}>Save Changes</Button>
+      </Modal>
     </PageContainer>
   );
 }
+
