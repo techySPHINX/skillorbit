@@ -7,8 +7,11 @@ import Loader from "../../components/Loader";
 import Avatar from "../../components/Avatar";
 import PageContainer from "../../components/PageContainer";
 import Button from "../../components/Button";
+import { motion, easeOut } from "framer-motion";
+import { FaEdit } from "react-icons/fa";
+import ErrorAlert from "../../components/ErrorAlert";
 
-const ProfileContainer = styled.div`
+const ProfileContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +48,7 @@ const ProfileAvatarWrapper = styled.div`
   display: inline-block;
 `;
 
-const ProfileInfoGrid = styled.div`
+const ProfileInfoGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.md};
@@ -57,7 +60,7 @@ const ProfileInfoGrid = styled.div`
   }
 `;
 
-const InfoItem = styled.div`
+const InfoItem = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.lightPink};
   padding: ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.borderRadius.md};
@@ -84,13 +87,28 @@ export default function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     api
       .get(`/users/${id}`)
       .then((res) => setUser(res.data.user))
+      .catch((err) => {
+        console.error("Error fetching user profile:", err);
+        setError("Failed to load user profile. Please try again later.");
+      })
       .finally(() => setLoading(false));
   }, [id]);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+  };
 
   if (loading)
     return (
@@ -98,11 +116,21 @@ export default function Profile() {
         <Loader />
       </PageContainer>
     );
+  if (error)
+    return (
+      <PageContainer>
+        <ErrorAlert message={error} />
+      </PageContainer>
+    );
   if (!user) return <PageContainer>User not found.</PageContainer>;
 
   return (
     <PageContainer>
-      <ProfileContainer>
+      <ProfileContainer
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
         <ProfileHeader>
           <ProfileAvatarWrapper>
             <Avatar src={user.profilePhoto || `https://via.placeholder.com/96/e75480/ffffff?text=${user.username.charAt(0)}`} alt={user.username} size={96} />
@@ -110,24 +138,30 @@ export default function Profile() {
           <SectionTitle>{user.username}</SectionTitle>
         </ProfileHeader>
 
-        <ProfileInfoGrid>
-          <InfoItem>
+        <ProfileInfoGrid
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+        >
+          <InfoItem variants={itemVariants}>
             <strong>Email</strong>
             <span>{user.email}</span>
           </InfoItem>
-          <InfoItem>
+          <InfoItem variants={itemVariants}>
             <strong>Location</strong>
             <span>{user.location || "N/A"}</span>
           </InfoItem>
-          <InfoItem>
+          <InfoItem variants={itemVariants}>
             <strong>Skills Offered</strong>
             <span>{user.skillsOffered?.join(", ") || "N/A"}</span>
           </InfoItem>
-          <InfoItem>
+          <InfoItem variants={itemVariants}>
             <strong>Skills Wanted</strong>
             <span>{user.skillsWanted?.join(", ") || "N/A"}</span>
           </InfoItem>
-          <InfoItem>
+          <InfoItem variants={itemVariants}>
             <strong>Availability</strong>
             <span>{user.availability || "N/A"}</span>
           </InfoItem>
@@ -135,7 +169,7 @@ export default function Profile() {
 
         <EditButtonContainer>
           <Button variant="primary" onClick={() => alert("Edit Profile functionality coming soon!")}>
-            Edit Profile
+            <FaEdit /> Edit Profile
           </Button>
         </EditButtonContainer>
       </ProfileContainer>

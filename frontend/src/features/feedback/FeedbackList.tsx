@@ -6,8 +6,10 @@ import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import Card from "../../components/Card";
 import ErrorAlert from "../../components/ErrorAlert";
+import { motion } from "framer-motion";
+import { FaStar, FaUserCircle } from "react-icons/fa";
 
-const FeedbackContent = styled.div`
+const FeedbackContent = styled(motion.div)`
   max-width: 800px;
   margin: ${({ theme }) => theme.spacing.xl} auto;
   padding: 0 ${({ theme }) => theme.spacing.lg};
@@ -23,7 +25,7 @@ const FeedbackContent = styled.div`
   }
 `;
 
-const FeedbackGrid = styled.div`
+const FeedbackGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
@@ -35,7 +37,7 @@ const FeedbackGrid = styled.div`
   }
 `;
 
-const FeedbackCardStyled = styled(Card)`
+const FeedbackCardBase = styled(Card)`
   padding: ${({ theme }) => theme.spacing.lg};
   display: flex;
   flex-direction: column;
@@ -53,6 +55,8 @@ const FeedbackCardStyled = styled(Card)`
   }
 `;
 
+const FeedbackCardStyled = motion(FeedbackCardBase);
+
 const FeedbackHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -64,12 +68,18 @@ const FeedbackUser = styled.span`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.darkGray};
   font-size: ${({ theme }) => theme.fontSizes.medium};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 const FeedbackRating = styled.span`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primary};
   font-size: ${({ theme }) => theme.fontSizes.large};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 const FeedbackComment = styled.p`
@@ -95,9 +105,23 @@ export default function FeedbackList({ userId }: { userId: string }) {
       .finally(() => setLoading(false));
   }, [userId]);
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+  };
+
   return (
     <PageContainer>
-      <FeedbackContent>
+      <FeedbackContent
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
         <SectionTitle>User Feedback</SectionTitle>
         {loading ? (
           <Loader />
@@ -106,12 +130,22 @@ export default function FeedbackList({ userId }: { userId: string }) {
         ) : feedbacks.length === 0 ? (
           <p>No feedback yet for this user.</p>
         ) : (
-          <FeedbackGrid>
-            {feedbacks.map((fb) => (
-              <FeedbackCardStyled key={fb._id}>
+          <FeedbackGrid
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.1 } },
+            }}
+          >
+            {feedbacks.map((fb, index) => (
+              <FeedbackCardStyled
+                key={fb._id}
+                variants={itemVariants}
+                transition={{ delay: index * 0.1 }}
+              >
                 <FeedbackHeader>
-                  <FeedbackUser>From: {fb.fromUser?.username || "Anonymous"}</FeedbackUser>
-                  <FeedbackRating>{fb.rating} / 5</FeedbackRating>
+                  <FeedbackUser><FaUserCircle /> From: {fb.fromUser?.username || "Anonymous"}</FeedbackUser>
+                  <FeedbackRating>{fb.rating} <FaStar /></FeedbackRating>
                 </FeedbackHeader>
                 <FeedbackComment>{fb.comment || "No comment provided."}</FeedbackComment>
               </FeedbackCardStyled>

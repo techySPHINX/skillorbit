@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import { motion, easeOut } from "framer-motion";
+import { FaUserPlus } from "react-icons/fa";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { registerUser } from "../../store/authSlice";
@@ -11,7 +13,7 @@ import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import SectionTitle from "../../components/SectionTitle";
 
-const AuthContainer = styled.div`
+const AuthContainer = styled(motion.div)`
   display: flex;
   background: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
@@ -28,9 +30,9 @@ const AuthContainer = styled.div`
 
 const AuthImage = styled.div`
   flex: 1;
-  background: url('/path/to/your/register-image.jpg') no-repeat center center;
   background-size: cover;
   min-height: 300px; /* Ensure image is visible on small screens */
+  background-position: center;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     min-height: 500px; /* Adjust height for larger screens */
@@ -55,7 +57,7 @@ const AuthFormWrapper = styled.div`
     margin-top: ${({ theme }) => theme.spacing.lg};
   }
 
-  .register-btn {
+  button {
     margin-top: ${({ theme }) => theme.spacing.md};
   }
 `;
@@ -93,10 +95,19 @@ export default function RegisterForm() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOut } },
+  };
+
   return (
     <PageContainer>
-      <AuthContainer>
-        <AuthImage style={{ backgroundImage: `url('https://via.placeholder.com/450x500/e75480/ffffff?text=Register+Image')` }} />
+      <AuthContainer
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <AuthImage style={{ backgroundImage: `url('https://via.placeholder.com/450x500/e75480/ffffff?text=Join+Us')` }} />
         <AuthFormWrapper>
           <SectionTitle>Create Account</SectionTitle>
           {error && <ErrorAlert message={error} />}
@@ -122,8 +133,8 @@ export default function RegisterForm() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               required
             />
-            <Button className="register-btn" type="submit" disabled={loading}>
-              {loading ? <Loader /> : "Register"}
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader /> : <>Register <FaUserPlus /></>}
             </Button>
           </form>
           <StyledLink to="/login">Already have an account? Sign in here.</StyledLink>

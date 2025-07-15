@@ -5,8 +5,10 @@ import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import Card from "../../components/Card";
 import ErrorAlert from "../../components/ErrorAlert";
+import { motion, easeOut } from "framer-motion";
+import { FaBell, FaCheckCircle } from "react-icons/fa";
 
-const NotificationsContent = styled.div`
+const NotificationsContent = styled(motion.div)`
   max-width: 800px;
   margin: ${({ theme }) => theme.spacing.xl} auto;
   padding: 0 ${({ theme }) => theme.spacing.lg};
@@ -22,7 +24,7 @@ const NotificationsContent = styled.div`
   }
 `;
 
-const NotificationGrid = styled.div`
+const NotificationGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.md};
@@ -34,7 +36,10 @@ const NotificationGrid = styled.div`
   }
 `;
 
-const NotificationCardStyled = styled(Card)<{ read: boolean }>`
+
+const MotionCard = motion(Card);
+
+const NotificationCardStyled = styled(MotionCard)<{ read: boolean }>`
   padding: ${({ theme }) => theme.spacing.lg};
   display: flex;
   flex-direction: column;
@@ -63,6 +68,9 @@ const NotificationMessage = styled.p`
   color: ${({ theme }) => theme.colors.darkGray};
   line-height: 1.5;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 const NotificationTimestamp = styled.span`
@@ -85,9 +93,23 @@ export default function NotificationList() {
     error: string | null;
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+  };
+
   return (
     <PageContainer>
-      <NotificationsContent>
+      <NotificationsContent
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
         <SectionTitle>Notifications</SectionTitle>
         {loading ? (
           <Loader />
@@ -96,10 +118,24 @@ export default function NotificationList() {
         ) : notifications.length === 0 ? (
           <p>No notifications.</p>
         ) : (
-          <NotificationGrid>
-            {notifications.map((n) => (
-              <NotificationCardStyled key={n._id} read={n.isRead}>
-                <NotificationMessage>{n.message}</NotificationMessage>
+          <NotificationGrid
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.1 } },
+            }}
+          >
+            {notifications.map((n, index) => (
+              <NotificationCardStyled
+                key={n._id}
+                read={n.isRead}
+                variants={itemVariants}
+                transition={{ delay: index * 0.1 }}
+              >
+                <NotificationMessage>
+                  {n.isRead ? <FaCheckCircle color="green" /> : <FaBell color="#e75480" />}
+                  {n.message}
+                </NotificationMessage>
                 <NotificationTimestamp>
                   {new Date(n.createdAt).toLocaleString()}
                 </NotificationTimestamp>

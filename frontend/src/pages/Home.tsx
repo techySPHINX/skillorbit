@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { fetchSkills, type Skill } from "../api/skill";
 import Loader from "../components/Loader";
 import ErrorAlert from "../components/ErrorAlert";
+import { motion } from "framer-motion";
+import { FaArrowRight, FaUserPlus } from "react-icons/fa";
 
 const HeroSection = styled.section`
   background: linear-gradient(135deg, ${({ theme }) => theme.colors.lightPink} 0%, #f8e8ed 100%);
@@ -42,7 +44,7 @@ const HeroSection = styled.section`
   }
 `;
 
-const HeroContent = styled.div`
+const HeroContent = styled(motion.div)`
   max-width: 800px;
   z-index: 1;
 `;
@@ -99,7 +101,7 @@ const SkillsGrid = styled.div`
   margin-right: auto;
 `;
 
-const SkillCard = styled(Card)`
+const SkillCard = styled(motion(Card))`
   padding: ${({ theme }) => theme.spacing.md};
   display: flex;
   flex-direction: column;
@@ -156,20 +158,38 @@ export default function Home() {
     getSkills();
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+  };
+
   return (
     <>
       <HeroSection>
-        <HeroContent>
+        <HeroContent
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
           <HeroTitle>Unlock Your Potential with SkillOrbit</HeroTitle>
           <HeroSubtitle>
             Connect with a vibrant community to exchange knowledge, learn new skills, and grow together. Your journey to mastery starts here.
           </HeroSubtitle>
           <ButtonGroup>
             <Link to="/skills" style={{ textDecoration: "none" }}>
-              <Button>Explore Skills</Button>
+              <Button>
+                Explore Skills <FaArrowRight />
+              </Button>
             </Link>
             <Link to="/register" style={{ textDecoration: "none" }}>
-              <Button variant="secondary">Join Now</Button>
+              <Button variant="secondary">
+                Join Now <FaUserPlus />
+              </Button>
             </Link>
           </ButtonGroup>
         </HeroContent>
@@ -178,14 +198,20 @@ export default function Home() {
       <SkillsSection>
         <SectionTitle>Discover Popular Skills</SectionTitle>
         {loading && <Loader />}
-        {error && <ErrorAlert>{error}</ErrorAlert>}
+        {error && <ErrorAlert message={error} />}
         {!loading && !error && skills.length === 0 && (
           <p>No skills found. Be the first to add one!</p>
         )}
         {!loading && !error && skills.length > 0 && (
           <SkillsGrid>
-            {skills.map((skill) => (
-              <SkillCard key={skill._id}>
+            {skills.map((skill, index) => (
+              <SkillCard
+                key={skill._id}
+                initial="hidden"
+                animate="visible"
+                variants={itemVariants}
+                transition={{ delay: index * 0.1 }}
+              >
                 <SkillImage src={`https://via.placeholder.com/80?text=${skill.name.charAt(0)}`} alt={skill.name} />
                 <SkillName>{skill.name}</SkillName>
                 <SkillDescription>{skill.description || "No description available."}</SkillDescription>

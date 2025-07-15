@@ -6,15 +6,17 @@ import Card from "../../components/Card";
 import styled from "styled-components";
 import SectionTitle from "../../components/SectionTitle";
 import ErrorAlert from "../../components/ErrorAlert";
+import { motion } from "framer-motion";
+import { FaUser, FaBan, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-const UserManagementContainer = styled(Card)`
+const UserManagementContainer = styled(motion(Card))`
   padding: ${({ theme }) => theme.spacing.lg};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md};
 `;
 
-const StyledTable = styled.table`
+const StyledTable = styled(motion.table)`
   width: 100%;
   border-collapse: collapse;
   margin-top: ${({ theme }) => theme.spacing.md};
@@ -32,6 +34,9 @@ const StyledTable = styled.table`
     color: ${({ theme }) => theme.colors.darkGray};
     font-weight: 600;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 
   tr:last-child td {
@@ -102,6 +107,9 @@ const StatusBadge = styled.span<{ banned: boolean }>`
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme, banned }) =>
     banned ? theme.colors.red : theme.colors.green};
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 export default function UserManagement() {
@@ -145,8 +153,22 @@ export default function UserManagement() {
       });
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+  };
+
   return (
-    <UserManagementContainer>
+    <UserManagementContainer
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <SectionTitle>User Management</SectionTitle>
       {error && <ErrorAlert message={error} />}
       {loading ? (
@@ -154,10 +176,16 @@ export default function UserManagement() {
       ) : users.length === 0 ? (
         <p>No users found.</p>
       ) : (
-        <StyledTable>
+        <StyledTable
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.05 } },
+          }}
+        >
           <thead>
             <tr>
-              <th>Username</th>
+              <th><FaUser /> Username</th>
               <th>Email</th>
               <th>Status</th>
               <th>Action</th>
@@ -165,11 +193,12 @@ export default function UserManagement() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id}>
+              <motion.tr key={user._id} variants={itemVariants}>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>
                   <StatusBadge banned={user.banned}>
+                    {user.banned ? <FaTimesCircle /> : <FaCheckCircle />}
                     {user.banned ? "Banned" : "Active"}
                   </StatusBadge>
                 </td>
@@ -179,18 +208,18 @@ export default function UserManagement() {
                       variant="secondary"
                       onClick={() => handleUnban(user._id)}
                     >
-                      Unban
+                      <FaCheckCircle /> Unban
                     </Button>
                   ) : (
                     <Button
                       variant="primary"
                       onClick={() => handleBan(user._id)}
                     >
-                      Ban
+                      <FaBan /> Ban
                     </Button>
                   )}
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </StyledTable>

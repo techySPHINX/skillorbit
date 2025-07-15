@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import { motion } from "framer-motion";
+import { FaSignInAlt } from "react-icons/fa";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { loginUser } from "../../store/authSlice";
@@ -11,7 +13,7 @@ import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import SectionTitle from "../../components/SectionTitle";
 
-const AuthContainer = styled.div`
+const AuthContainer = styled(motion.div)`
   display: flex;
   background: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
@@ -28,9 +30,9 @@ const AuthContainer = styled.div`
 
 const AuthImage = styled.div`
   flex: 1;
-  background: url('/path/to/your/login-image.jpg') no-repeat center center;
   background-size: cover;
   min-height: 300px; /* Ensure image is visible on small screens */
+  background-position: center;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     min-height: 500px; /* Adjust height for larger screens */
@@ -55,7 +57,7 @@ const AuthFormWrapper = styled.div`
     margin-top: ${({ theme }) => theme.spacing.lg};
   }
 
-  .login-btn {
+  button {
     margin-top: ${({ theme }) => theme.spacing.md};
   }
 `;
@@ -90,10 +92,19 @@ export default function LoginForm() {
     await dispatch(loginUser({ email, password }));
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } },
+  };
+
   return (
     <PageContainer>
-      <AuthContainer>
-        <AuthImage style={{ backgroundImage: `url('https://via.placeholder.com/450x500/e75480/ffffff?text=Login+Image')` }} />
+      <AuthContainer
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <AuthImage style={{ backgroundImage: `url('https://via.placeholder.com/450x500/e75480/ffffff?text=Welcome+Back')` }} />
         <AuthFormWrapper>
           <SectionTitle>Sign In</SectionTitle>
           {error && <ErrorAlert message={error} />}
@@ -112,8 +123,8 @@ export default function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <Button className="login-btn" type="submit" disabled={loading}>
-              {loading ? <Loader /> : "Sign In"}
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader /> : <>Sign In <FaSignInAlt /></>}
             </Button>
           </form>
           <StyledLink to="/register">Don't have an account? Register here.</StyledLink>

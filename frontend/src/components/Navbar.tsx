@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "./Button";
+import { FaHome, FaLightbulb, FaExchangeAlt, FaCommentDots, FaBell, FaUserCircle, FaSignInAlt } from "react-icons/fa";
 
 const Nav = styled.nav`
   background-color: ${({ theme }) => theme.colors.white};
@@ -44,6 +45,9 @@ const NavLink = styled(Link)`
   font-size: ${({ theme }) => theme.fontSizes.medium};
   font-weight: 500;
   transition: color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
 
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
@@ -53,15 +57,17 @@ const NavLink = styled(Link)`
 export default function Navbar() {
   return (
     <Nav>
-      <Logo to="/">SkillOrbit</Logo>
+      <Logo to="/"><FaHome /> SkillOrbit</Logo>
       <NavLinks>
-        <NavLink to="/skills">Skills</NavLink>
-        <NavLink to="/swaps">Swaps</NavLink>
-        <NavLink to="/feedback">Feedback</NavLink>
-        <NavLink to="/notifications">Notifications</NavLink>
-        <NavLink to="/profile">Profile</NavLink>
+        <NavLink to="/skills"><FaLightbulb /> Skills</NavLink>
+        <NavLink to="/swaps"><FaExchangeAlt /> Swaps</NavLink>
+        <NavLink to="/feedback"><FaCommentDots /> Feedback</NavLink>
+        <NavLink to="/notifications"><FaBell /> Notifications</NavLink>
+        <NavLink to="/profile"><FaUserCircle /> Profile</NavLink>
         <Link to="/login" style={{ textDecoration: "none" }}>
-          <Button variant="primary">Login</Button>
+          <Button variant="primary">
+            <FaSignInAlt /> Login
+          </Button>
         </Link>
       </NavLinks>
     </Nav>

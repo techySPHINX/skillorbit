@@ -5,8 +5,10 @@ import AnalyticsPanel from "./AnalyticsPanel";
 import PlatformMessage from "./PlatformMessage";
 import AdminLogs from "./AdminLogs";
 import PageContainer from "../../components/PageContainer";
+import { motion, easeOut } from "framer-motion";
+import { FaTachometerAlt } from "react-icons/fa";
 
-const AdminDashboardContent = styled.div`
+const AdminDashboardContent = styled(motion.div)`
   max-width: 1200px;
   margin: ${({ theme }) => theme.spacing.xl} auto;
   padding: ${({ theme }) => theme.spacing.xl};
@@ -20,7 +22,7 @@ const AdminDashboardContent = styled.div`
   }
 `;
 
-const AdminGrid = styled.div`
+const AdminGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: ${({ theme }) => theme.spacing.xl};
@@ -32,11 +34,29 @@ const AdminGrid = styled.div`
 `;
 
 export default function AdminDashboard() {
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const gridVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } },
+  };
+
   return (
     <PageContainer>
-      <AdminDashboardContent>
-        <SectionTitle>Admin Dashboard</SectionTitle>
-        <AdminGrid>
+      <AdminDashboardContent
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <SectionTitle><FaTachometerAlt /> Admin Dashboard</SectionTitle>
+        <AdminGrid
+          initial="hidden"
+          animate="visible"
+          variants={gridVariants}
+        >
           <UserManagement />
           <AnalyticsPanel />
           <PlatformMessage />
