@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "./Button";
-import { FaHome, FaLightbulb, FaExchangeAlt, FaCommentDots, FaBell, FaUserCircle, FaSignInAlt } from "react-icons/fa";
+import { FaHome, FaLightbulb, FaExchangeAlt, FaCommentDots, FaBell, FaUserCircle, FaSignInAlt, FaSignOutAlt, FaUserShield } from "react-icons/fa";
+import useAppSelector from "../hooks/useAppSelector";
+import useAppDispatch from "../hooks/useAppDispatch";
+import { logout } from "../store/authSlice";
 
 const Nav = styled.nav`
   background-color: ${({ theme }) => theme.colors.white};
@@ -55,20 +58,39 @@ const NavLink = styled(Link)`
 `;
 
 export default function Navbar() {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <Nav>
       <Logo to="/"><FaHome /> SkillOrbit</Logo>
       <NavLinks>
         <NavLink to="/skills"><FaLightbulb /> Skills</NavLink>
         <NavLink to="/swaps"><FaExchangeAlt /> Swaps</NavLink>
-        <NavLink to="/feedback"><FaCommentDots /> Feedback</NavLink>
-        <NavLink to="/notifications"><FaBell /> Notifications</NavLink>
-        <NavLink to="/profile"><FaUserCircle /> Profile</NavLink>
-        <Link to="/login" style={{ textDecoration: "none" }}>
-          <Button variant="primary">
-            <FaSignInAlt /> Login
-          </Button>
-        </Link>
+        {user && (
+          <>
+            <NavLink to={`/feedback/user/${user._id}`}><FaCommentDots /> Feedback</NavLink>
+            <NavLink to="/notifications"><FaBell /> Notifications</NavLink>
+            <NavLink to={`/profile/${user._id}`}><FaUserCircle /> Profile</NavLink>
+            {user.roles?.includes('admin') && (
+              <NavLink to="/admin"><FaUserShield /> Admin</NavLink>
+            )}
+            <Button variant="secondary" onClick={handleLogout}>
+              <FaSignOutAlt /> Logout
+            </Button>
+          </>
+        )}
+        {!user && (
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            <Button variant="primary">
+              <FaSignInAlt /> Login
+            </Button>
+          </Link>
+        )}
       </NavLinks>
     </Nav>
   );

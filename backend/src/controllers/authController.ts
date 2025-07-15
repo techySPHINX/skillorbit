@@ -52,7 +52,7 @@ export const login = async (
     const token = signJwt({ id: user._id, roles: user.roles })
     res.json({
       token,
-      user: { id: user._id, username: user.username, email: user.email },
+      user: { id: user._id, username: user.username, email: user.email, roles: user.roles },
     })
   } catch (err) {
     next(err)

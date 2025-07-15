@@ -11,6 +11,7 @@ import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import Navbar from "../components/Navbar";
 import UserProfilePage from "../pages/UserProfile";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -21,15 +22,22 @@ export default function AppRoutes() {
 
         <Route path="/skills" element={<Skills />} />
         <Route path="/swaps" element={<SwapsPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/user/:id" element={<UserProfilePage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route path="/feedback/user/:userId" element={<FeedbackPage />} />
+        
+        {/* Protected User Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/user/:id" element={<UserProfilePage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/feedback/user/:userId" element={<FeedbackPage />} />
+        </Route>
 
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
-        <Route path="/admin" element={<AdminDashboardPage />} />
+        {/* Protected Admin Route */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/admin" element={<AdminDashboardPage />} />
+        </Route>
 
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" />} />

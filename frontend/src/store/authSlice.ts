@@ -6,6 +6,7 @@ interface User {
   _id: string;
   username: string;
   email: string;
+  roles?: string[];
 }
 
 interface AuthState {
@@ -24,6 +25,7 @@ export const fetchUser = createAsyncThunk<User, void, { rejectValue: string }>(
         _id: user._id ?? user.id,
         username: user.username,
         email: user.email,
+        roles: user.roles,
       };
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -46,6 +48,7 @@ export const loginUser = createAsyncThunk<
       _id: user._id ?? user.id,
       username: user.username,
       email: user.email,
+      roles: user.roles,
     };
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;

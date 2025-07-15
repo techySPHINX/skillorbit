@@ -19,12 +19,11 @@ import { setupSocketIO } from './sockets'
 const app: Application = express()
 
 // Middleware
+app.use(compression())
 app.use(express.json())
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || [
-      'https://your-frontend-domain.com',
-    ],
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
@@ -55,9 +54,7 @@ const server = http.createServer(app)
 
 const io = new SocketIOServer(server, {
   cors: {
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || [
-      'https://your-frontend-domain.com',
-    ],
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [],
     methods: ['GET', 'POST'],
   },
 })
