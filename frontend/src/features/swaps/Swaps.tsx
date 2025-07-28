@@ -12,7 +12,6 @@ import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FaArrowRight,
@@ -150,7 +149,7 @@ const MessageItem = styled.div`
 `;
 
 export default function Swaps() {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: { _id: string } | null };
   const [swaps, setSwaps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -322,13 +321,13 @@ export default function Swaps() {
                   {user?._id === swap.responder && swap.status === "pending" && (
                     <>
                       <Button
-                        variant="success"
+                        variant="primary"
                         onClick={() => handleUpdateStatus(swap._id, "accepted")}
                       >
                         Accept
                       </Button>
                       <Button
-                        variant="danger"
+                        variant="secondary"
                         onClick={() => handleUpdateStatus(swap._id, "rejected")}
                       >
                         Reject
@@ -366,24 +365,30 @@ export default function Swaps() {
         onClose={() => setCreateModalOpen(false)}
         title="Create a New Swap"
       >
-        <Input
-          label="Responder's User ID"
-          name="responder"
-          value={formData.responder}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Skill Offered ID"
-          name="skillOffered"
-          value={formData.skillOffered}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Skill Wanted ID"
-          name="skillWanted"
-          value={formData.skillWanted}
-          onChange={handleInputChange}
-        />
+        <label>
+          Responder's User ID
+          <Input
+            name="responder"
+            value={formData.responder}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Skill Offered ID
+          <Input
+            name="skillOffered"
+            value={formData.skillOffered}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Skill Wanted ID
+          <Input
+            name="skillWanted"
+            value={formData.skillWanted}
+            onChange={handleInputChange}
+          />
+        </label>
         <Button onClick={handleCreateSwap}>Create Swap</Button>
       </Modal>
 
@@ -393,10 +398,9 @@ export default function Swaps() {
         title={`Message Swap with ${currentSwap?.responder?.username || ""}`}
       >
         <Textarea
-          placeholder="Type your message here..."
-          value={messageContent}
-          onChange={(e) => setMessageContent(e.target.value)}
-        />
+      placeholder="Type your message here..."
+      value={messageContent}
+      onChange={(e) => setMessageContent(e.target.value)} label={""}        />
         <Button onClick={handleSendMessage} disabled={!messageContent.trim()}>
           Send Message
         </Button>
@@ -407,14 +411,16 @@ export default function Swaps() {
         onClose={() => setIsFeedbackModalOpen(false)}
         title={`Leave Feedback for ${currentSwap?.responder?.username || ""}`}
       >
-        <Input
-          label="Rating (1-5)"
-          type="number"
-          min={1}
-          max={5}
-          value={feedbackData.rating}
-          onChange={(e) => setFeedbackData({ ...feedbackData, rating: parseInt(e.target.value) })}
-        />
+        <label>
+          Rating (1-5)
+          <Input
+            type="number"
+            min={1}
+            max={5}
+            value={feedbackData.rating}
+            onChange={(e) => setFeedbackData({ ...feedbackData, rating: parseInt(e.target.value) })}
+          />
+        </label>
         <Textarea
           label="Comment"
           placeholder="Leave a comment..."

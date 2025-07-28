@@ -100,3 +100,32 @@ export const updateProfilePhoto = async (
     next(err)
   }
 }
+
+export const registerFCMToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { fcmToken } = req.body
+    const currentUser = req.user as { _id: string }
+
+    if (!fcmToken) {
+      return res.status(400).json({ message: 'FCM token is required' })
+    }
+
+    const user = await findUserById(currentUser._id)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    if (!user.fcmTokens.includes(fcmToken)) {
+      user.fcmTokens.push(fcmToken)
+      await updateUser(currentUser._id, { fcmTokens: user.fcmTokens })
+    }
+
+    res.status(200).json({ message: 'FCM token registered successfully' })
+  } catch (err) {
+    next(err)
+  }
+}

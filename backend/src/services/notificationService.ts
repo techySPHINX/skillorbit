@@ -1,5 +1,13 @@
 import Notification, { INotification } from '../models/Notification'
+import { findUserById } from './userService'
 import { logger } from '../config/logger'
+import admin from 'firebase-admin'
+
+const serviceAccount = require('../../firebase-service-account.json')
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+})
 
 export const createNotification = async (
   notificationData: Partial<INotification>
@@ -19,6 +27,10 @@ export const createNotification = async (
 
     const savedNotification = await notification.save()
     logger.info(`Notification created for user ${user}`)
+
+    // Send push notification
+    await sendPushNotification(user.toString(), message)
+
     return savedNotification
   } catch (error) {
     logger.error('Error creating notification:', error)
@@ -67,5 +79,53 @@ export const markNotificationRead = async (
   } catch (error) {
     logger.error('Error marking notification as read:', error)
     throw new Error('Failed to mark notification as read.')
+  }
+}
+
+export const sendPushNotification = async (userId: string, message: string) => {
+  try {
+    const user = await findUserById(userId)
+    if (!user || !user.fcmTokens || user.fcmTokens.length === 0) {
+      logger.info(`User ${userId} has no FCM tokens, skipping push notification.`)
+      return
+    }
+
+    const payload = {
+      notification: {
+        title: 'New Notification',
+        body: message,
+      },
+    }
+
+    const response = await admin.messaging().sendToDevice(user.fcmTokens, payload)
+    logger.info(`Push notification sent to user ${userId}`)
+
+    // Clean up invalid tokens
+    const tokensToRemove: string[] = []
+    response.results.forEach((result, index) => {
+      const error = result.error
+      if (error) {
+        logger.error(
+          `Failed to send notification to token ${user.fcmTokens[index]}`,
+          error
+        )
+        if (
+          error.code === 'messaging/invalid-registration-token' ||
+          error.code === 'messaging/registration-token-not-registered'
+        ) {
+          tokensToRemove.push(user.fcmTokens[index])
+        }
+      }
+    })
+
+    if (tokensToRemove.length > 0) {
+      user.fcmTokens = user.fcmTokens.filter(
+        (token) => !tokensToRemove.includes(token)
+      )
+      await user.save()
+      logger.info(`Removed ${tokensToRemove.length} invalid FCM tokens.`)
+    }
+  } catch (error) {
+    logger.error(`Error sending push notification to user ${userId}:`, error)
   }
 }

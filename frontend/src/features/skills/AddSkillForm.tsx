@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import { addSkill } from '../../store/skillSlice';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { Textarea } from '../../components/Textarea';
-import { Modal } from '../../components/Modal';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Textarea from '../../components/Textarea';
+import Modal from '../../components/Modal';
 
 const Form = styled.form`
   display: flex;
@@ -65,8 +65,7 @@ export const AddSkillForm: React.FC<AddSkillFormProps> = ({ isOpen, onClose }) =
         <Textarea
           placeholder="Brief description of the skill..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          onChange={(e) => setDescription(e.target.value)} label={''}        />
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Button type="submit" variant="primary">
           Add Skill

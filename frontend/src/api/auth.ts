@@ -9,6 +9,7 @@ export interface RegisterData {
 export interface AuthResponse {
   token: string;
   user: {
+    roles: string[] | undefined;
     _id: string;
     id: string;
     username: string;

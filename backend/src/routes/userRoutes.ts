@@ -4,6 +4,7 @@ import {
   getProfile,
   updateProfile,
   updateProfilePhoto,
+  registerFCMToken,
 } from '../controllers/userController'
 import { authenticate } from '../middlewares/auth'
 import { validateBody } from '../middlewares/validation'
@@ -20,6 +21,10 @@ const updateProfileSchema = Joi.object({
   skillsOffered: Joi.array().items(Joi.string()),
   skillsWanted: Joi.array().items(Joi.string()),
   isPrivate: Joi.boolean(),
+})
+
+const fcmTokenSchema = Joi.object({
+  fcmToken: Joi.string().required(),
 })
 
 /**
@@ -53,6 +58,18 @@ router.put(
   authenticate,
   upload.single('photo'),
   updateProfilePhoto
+)
+
+/**
+ * @route   POST /users/fcm-token
+ * @desc    Register FCM token for push notifications
+ * @access  Private (Authenticated users)
+ */
+router.post(
+  '/fcm-token',
+  authenticate,
+  validateBody(fcmTokenSchema),
+  registerFCMToken
 )
 
 export default router

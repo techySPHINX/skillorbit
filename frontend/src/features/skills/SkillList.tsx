@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks/useAppSelector";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import useAppSelector from "../../hooks/useAppSelector";
+import useAppDispatch from "../../hooks/useAppDispatch";
 import { getSkills, deleteSkill } from "../../store/skillSlice";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,7 +8,7 @@ import SectionTitle from "../../components/SectionTitle";
 import Loader from "../../components/Loader";
 import PageContainer from "../../components/PageContainer";
 import Card from "../../components/Card";
-import { Button } from "../../components/Button";
+import Button from "../../components/Button";
 import { AddSkillForm } from "./AddSkillForm";
 import ErrorAlert from "../../components/ErrorAlert";
 
@@ -142,7 +142,7 @@ export default function SkillList() {
                     <SkillName>{skill.name}</SkillName>
                     <SkillCategory>{skill.category || "Uncategorized"}</SkillCategory>
                     <SkillDescription>{skill.description || "No description available."}</SkillDescription>
-                    <Button variant="danger" onClick={() => handleDelete(skill._id)}>
+                    <Button variant="secondary" onClick={() => handleDelete(skill._id)}>
                       Delete
                     </Button>
                   </SkillCardStyled>

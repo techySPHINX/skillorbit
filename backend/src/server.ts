@@ -8,6 +8,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
 import { Server as SocketIOServer } from 'socket.io'
+import compression from 'compression'
 
 import { connectDB } from './config/db'
 import { logger } from './config/logger'
@@ -18,7 +19,6 @@ import { setupSocketIO } from './sockets'
 
 const app: Application = express()
 
-// Middleware
 app.use(compression())
 app.use(express.json())
 app.use(
@@ -77,3 +77,5 @@ const PORT = process.env.PORT || 5000
 server.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`)
 })
+
+

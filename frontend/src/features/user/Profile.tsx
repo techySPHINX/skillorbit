@@ -1,11 +1,10 @@
-
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   getUserProfile,
   updateUserProfile,
   updateProfilePhoto,
-  UserProfile,
+  type UserProfile,
 } from "../../api/user";
 import styled from "styled-components";
 import SectionTitle from "../../components/SectionTitle";
@@ -95,7 +94,7 @@ const EditButtonContainer = styled.div`
 
 export default function Profile() {
   const { id } = useParams();
-  const { user: authUser } = useAuth();
+  const { user: authUser } = useAuth() as { user: { _id: string } | null };
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -263,44 +262,53 @@ export default function Profile() {
         onClose={() => setEditModalOpen(false)}
         title="Edit Profile"
       >
-        <Input
-          label="Username"
-          name="username"
-          value={formData.username}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Location"
-          name="location"
-          value={formData.location}
-          onChange={handleInputChange}
-        />
-        <Textarea
-          label="Availability"
-          name="availability"
-          value={formData.availability}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Skills Offered (comma-separated)"
-          name="skillsOffered"
-          value={formData.skillsOffered}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Skills Wanted (comma-separated)"
-          name="skillsWanted"
-          value={formData.skillsWanted}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Profile Photo"
-          type="file"
-          onChange={handleFileChange}
-        />
+        <label>
+          Username
+          <Input
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Location
+          <Input
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Availability
+          <Textarea
+            name="availability"
+            value={formData.availability}
+            onChange={handleInputChange}
+            label={""}
+          />
+        </label>
+        <label>
+          Skills Offered (comma-separated)
+          <Input
+            name="skillsOffered"
+            value={formData.skillsOffered}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Skills Wanted (comma-separated)
+          <Input
+            name="skillsWanted"
+            value={formData.skillsWanted}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Profile Photo
+          <Input type="file" onChange={handleFileChange} />
+        </label>
         <Button onClick={handleSaveChanges}>Save Changes</Button>
       </Modal>
     </PageContainer>
   );
 }
-

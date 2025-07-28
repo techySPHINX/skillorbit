@@ -23,8 +23,7 @@ export default function AppRoutes() {
         <Route path="/skills" element={<Skills />} />
         <Route path="/swaps" element={<SwapsPage />} />
         
-        {/* Protected User Routes */}
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute children={undefined} />}>
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/user/:id" element={<UserProfilePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
@@ -34,8 +33,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
-        {/* Protected Admin Route */}
-        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['admin']} children={undefined} />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
         </Route>
 

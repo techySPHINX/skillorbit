@@ -58,6 +58,7 @@ export default theme;
 declare module 'styled-components' {
   export interface DefaultTheme {
     colors: {
+      danger: Interpolation<FastOmit<DetailedHTMLProps<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>, never>>;
       primary: string;
       white: string;
       lightPink: string;

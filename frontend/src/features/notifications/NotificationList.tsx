@@ -89,7 +89,12 @@ type Notification = {
 };
 
 export default function NotificationList() {
-  const { notifications, setNotifications, loading, error } = useNotifications();
+  const { notifications, setNotifications, loading, error } = useNotifications() as {
+    notifications: Notification[];
+    setNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
+    loading: boolean;
+    error?: string;
+  };
 
   const handleMarkAsRead = async (id: string) => {
     try {

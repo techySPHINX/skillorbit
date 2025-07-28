@@ -98,9 +98,7 @@ export interface AddSwapFeedbackResponse {
 }
 
 export const addSwapFeedback = async (
-  swapId: string,
-  feedbackId: string
-): Promise<AddSwapFeedbackResponse> => {
+swapId: string, _rating: number, feedbackId: string): Promise<AddSwapFeedbackResponse> => {
   const response = await api.post<AddSwapFeedbackResponse>(
     `/swaps/${swapId}/feedback`,
     { feedbackId }

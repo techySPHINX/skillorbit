@@ -15,6 +15,7 @@ export interface IUser extends Document {
   roles: string[]
   rating: number
   feedbacks: mongoose.Types.ObjectId[]
+  fcmTokens: string[]
   createdAt: Date
   updatedAt: Date
 }
@@ -41,6 +42,7 @@ const UserSchema = new Schema<IUser>(
     roles: { type: [String], default: ['user'] },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     feedbacks: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
+    fcmTokens: { type: [String], default: [] },
   },
   { timestamps: true }
 )

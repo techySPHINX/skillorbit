@@ -1,7 +1,7 @@
 
 import React from "react";
-import { PageContainer } from "../components/PageContainer";
-import { Profile } from "../features/user/Profile";
+import PageContainer from "../components/PageContainer";
+import Profile from "../features/user/Profile";
 
 const UserProfilePage: React.FC = () => {
   return (
