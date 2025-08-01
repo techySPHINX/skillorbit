@@ -1,36 +1,27 @@
-// src/api/user.ts
+import api from './api';
 
-import apiManager from './apiManager';
-import { API_ENDPOINTS } from '../config/api';
-import { UserProfile } from '../models/user';
-
-/**
- * Fetches a user's profile by their ID.
- * @param userId - The ID of the user to fetch.
- * @returns The user's profile data.
- */
-export const getUserProfile = (userId: string) => {
-  return apiManager.get(API_ENDPOINTS.GET_USER(userId));
+export const getProfile = async (id) => {
+  const response = await api.get(`/users/${id}`);
+  return response.data;
 };
 
-/**
- * Updates the current user's profile.
- * @param profileData - The updated profile data.
- * @returns The server's response.
- */
-export const updateUserProfile = (profileData: Partial<UserProfile>) => {
-  return apiManager.put(API_ENDPOINTS.UPDATE_USER, profileData);
+export const updateProfile = async (profileData) => {
+  const response = await api.put('/users', profileData);
+  return response.data;
 };
 
-/**
- * Updates the current user's profile photo.
- * @param photo - The new profile photo.
- * @returns The server's response.
- */
-export const updateProfilePhoto = (photo: FormData) => {
-  return apiManager.put(API_ENDPOINTS.UPDATE_PROFILE_PHOTO, photo, {
+export const updateProfilePhoto = async (photo) => {
+  const formData = new FormData();
+  formData.append('photo', photo);
+  const response = await api.put('/users/profile/photo', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+  return response.data;
+};
+
+export const registerFCMToken = async (fcmToken) => {
+  const response = await api.post('/users/fcm-token', { fcmToken });
+  return response.data;
 };

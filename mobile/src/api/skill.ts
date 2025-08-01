@@ -1,35 +1,16 @@
-// src/api/skill.ts
+import api from './api';
 
-import apiManager from './apiManager';
-import { API_ENDPOINTS } from '../config/api';
-import { Skill } from '../models/skill';
-
-/**
- * Fetches all skills.
- * @returns A list of all skills.
- */
-export const getSkills = () => {
-  return apiManager.get(API_ENDPOINTS.GET_SKILLS);
+export const addSkill = async (skillData) => {
+  const response = await api.post('/skills', skillData);
+  return response.data;
 };
 
-/**
- * Adds a new skill.
- * @param skillData - The data for the new skill.
- * @returns The server's response.
- */
-export const addSkill = (skillData: FormData) => {
-  return apiManager.post(API_ENDPOINTS.ADD_SKILL, skillData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+export const listSkills = async () => {
+  const response = await api.get('/skills');
+  return response.data;
 };
 
-/**
- * Deletes a skill by its ID.
- * @param skillId - The ID of the skill to delete.
- * @returns The server's response.
- */
-export const deleteSkill = (skillId: string) => {
-  return apiManager.delete(API_ENDPOINTS.DELETE_SKILL(skillId));
+export const removeSkill = async (id) => {
+  const response = await api.delete(`/skills/${id}`);
+  return response.data;
 };

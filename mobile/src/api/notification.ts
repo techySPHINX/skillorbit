@@ -1,21 +1,11 @@
-// src/api/notification.ts
+import api from './api';
 
-import apiManager from './apiManager';
-import { API_ENDPOINTS } from '../config/api';
-
-/**
- * Fetches all notifications for the current user.
- * @returns A list of notifications.
- */
-export const getNotifications = () => {
-  return apiManager.get(API_ENDPOINTS.GET_NOTIFICATIONS);
+export const listNotifications = async () => {
+  const response = await api.get('/notifications');
+  return response.data;
 };
 
-/**
- * Marks a notification as read.
- * @param notificationId - The ID of the notification to mark as read.
- * @returns The server's response.
- */
-export const markNotificationRead = (notificationId: string) => {
-  return apiManager.put(API_ENDPOINTS.MARK_NOTIFICATION_READ(notificationId));
+export const readNotification = async (id) => {
+  const response = await api.put(`/notifications/${id}/read`);
+  return response.data;
 };

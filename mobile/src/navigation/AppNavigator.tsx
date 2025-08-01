@@ -1,19 +1,22 @@
-// src/navigation/AppNavigator.tsx
-
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux';
-import AuthNavigator from './AuthNavigator';
-import MainNavigator from './MainNavigator';
+import { createStackNavigator } from '@react-navigation/stack';
+import ProfileScreen from '../screens/ProfileScreen';
+import SkillScreen from '../screens/SkillScreen';
+import SwapScreen from '../screens/SwapScreen';
+import FeedbackScreen from '../screens/FeedbackScreen';
+import NotificationScreen from '../screens/NotificationScreen';
+
+const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-
   return (
-    <NavigationContainer>
-      {isAuthenticated ? <MainNavigator /> : <AuthNavigator />}
-    </NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Skills" component={SkillScreen} />
+      <Stack.Screen name="Swaps" component={SwapScreen} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} />
+      <Stack.Screen name="Notifications" component={NotificationScreen} />
+    </Stack.Navigator>
   );
 };
 

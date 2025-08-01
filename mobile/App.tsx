@@ -6,7 +6,8 @@ import { socketService } from './src/services/socketService';
 import { notificationService } from './src/services/notificationService';
 import { Provider } from 'react-redux';
 import { store, RootState } from './src/redux';
-import { AppNavigator } from './src/navigation';
+import AuthNavigator from './src/navigation/AuthNavigator';
+import MainNavigator from './src/navigation/MainNavigator';
 
 const App = () => {
   return (
@@ -34,7 +35,8 @@ const Root = () => {
     };
   }, [isAuthenticated]);
 
-  return <AppNavigator />;
+  return isAuthenticated ? <MainNavigator /> : <AuthNavigator />;
+};
 };
 
 export default App;

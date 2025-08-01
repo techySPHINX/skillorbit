@@ -79,10 +79,13 @@ class NotificationService {
 
   private sendFCMTokenToBackend = async (token: string) => {
     try {
-      // TODO: Implement your API call to send the token to your backend
-      // Example using apiManager (assuming you have an endpoint for this):
-      // await apiManager.post('/api/register-fcm-token', { token });
-      console.log('FCM Token sent to backend placeholder:', token);
+      import { registerFCMToken } from '../api/user';
+      try {
+        await registerFCMToken(token);
+        console.log('FCM Token sent to backend successfully:', token);
+      } catch (error) {
+        console.error('Failed to send FCM token to backend:', error);
+      }
     } catch (error) {
       console.error('Failed to send FCM token to backend:', error);
     }

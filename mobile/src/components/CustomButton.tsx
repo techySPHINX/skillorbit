@@ -3,6 +3,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
+import { COLORS } from '../constants/colors';
 
 interface CustomButtonProps {
   title: string;

@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-transporter.verify((error, success) => {
+transporter.verify(error => {
   if (error) {
     logger.error('Email transporter verification failed:', error)
   } else {
@@ -49,7 +49,7 @@ export const sendEmail = async (
       to,
       subject,
       html,
-      text: text || html.replace(/<[^>]*>?/gm, ''), 
+      text: text || html.replace(/<[^>]*>?/gm, ''),
     }
 
     await transporter.sendMail(mailOptions)

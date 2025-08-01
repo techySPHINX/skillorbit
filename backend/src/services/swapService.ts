@@ -1,5 +1,7 @@
 import Swap, { ISwap } from '../models/Swap'
 import { logger } from '../config/logger'
+import { emitSwapUpdate, emitNewMessage } from '../sockets/socketEmitter'
+import { addPoints } from './gamificationService'
 
 export const createSwap = async (swapData: Partial<ISwap>): Promise<ISwap> => {
   try {
@@ -14,6 +16,11 @@ export const createSwap = async (swapData: Partial<ISwap>): Promise<ISwap> => {
     const swap = new Swap(swapData)
     const savedSwap = await swap.save()
     logger.info(`Swap created between ${requester} and ${responder}`)
+
+    // Emit swap update to both requester and responder
+    emitSwapUpdate(requester.toString(), savedSwap);
+    emitSwapUpdate(responder.toString(), savedSwap);
+
     return savedSwap
   } catch (error) {
     logger.error('Error creating swap:', error)
@@ -67,6 +74,17 @@ export const updateSwapStatus = async (
     }
 
     logger.info(`Swap ${swapId} status updated to ${status}`)
+
+    // Emit swap update to both requester and responder
+    emitSwapUpdate(updated.requester.toString(), updated);
+    emitSwapUpdate(updated.responder.toString(), updated);
+
+    // Award points if swap is completed
+    if (status === 'completed') {
+      await addPoints(updated.requester.toString(), 'SWAP_COMPLETED');
+      await addPoints(updated.responder.toString(), 'SWAP_COMPLETED');
+    }
+
     return updated
   } catch (error) {
     logger.error('Error updating swap status:', error)
@@ -103,6 +121,12 @@ export const addSwapMessage = async (
     }
 
     logger.info(`Message added to swap ${swapId} by ${senderId}`)
+
+    // Emit new message to both requester and responder
+    const latestMessage = updated.messages[updated.messages.length - 1];
+    emitNewMessage(updated.requester.toString(), latestMessage);
+    emitNewMessage(updated.responder.toString(), latestMessage);
+
     return updated
   } catch (error) {
     logger.error('Error adding swap message:', error)

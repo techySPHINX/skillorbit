@@ -1,36 +1,37 @@
-// src/navigation/MainNavigator.tsx
-
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/main/HomeScreen';
-import ProfileScreen from '../screens/main/ProfileScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import SkillScreen from '../screens/SkillScreen';
+import SwapScreen from '../screens/SwapScreen';
+import FeedbackScreen from '../screens/FeedbackScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 
-import SkillListScreen from '../screens/main/SkillListScreen';
-import SwapListScreen from '../screens/main/SwapListScreen';
-import CreateSwapScreen from '../screens/main/CreateSwapScreen';
-import NotificationScreen from '../screens/main/NotificationScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
+import BadgesScreen from '../screens/BadgesScreen';
 
 export type MainStackParamList = {
-  Home: undefined;
-  Profile: { userId: string };
-  SkillList: undefined;
-  SwapList: undefined;
-  CreateSwap: undefined;
-  Notification: undefined;
+  Profile: undefined;
+  Skills: undefined;
+  Swaps: undefined;
+  Feedback: { userId: string };
+  Notifications: undefined;
+  Leaderboard: undefined;
+  Badges: undefined;
 };
 
-const Stack = createStackNavigator<MainStackParamList>();
+const MainStack = createStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="SkillList" component={SkillListScreen} />
-      <Stack.Screen name="SwapList" component={SwapListScreen} />
-      <Stack.Screen name="CreateSwap" component={CreateSwapScreen} />
-      <Stack.Screen name="Notification" component={NotificationScreen} />
-    </Stack.Navigator>
+    <MainStack.Navigator>
+      <MainStack.Screen name="Profile" component={ProfileScreen} />
+      <MainStack.Screen name="Skills" component={SkillScreen} />
+      <MainStack.Screen name="Swaps" component={SwapScreen} />
+      <MainStack.Screen name="Feedback" component={FeedbackScreen} />
+      <MainStack.Screen name="Notifications" component={NotificationScreen} />
+      <MainStack.Screen name="Leaderboard" component={LeaderboardScreen} />
+      <MainStack.Screen name="Badges" component={BadgesScreen} />
+    </MainStack.Navigator>
   );
 };
 

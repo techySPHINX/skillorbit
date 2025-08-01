@@ -1,7 +1,7 @@
 import Filter from 'bad-words'
 import { logger } from '../config/logger'
 
-const filter = new (Filter as any)()
+const filter = new Filter()
 
 export const containsProfanity = (text: string): boolean => {
   if (typeof text !== 'string') return false

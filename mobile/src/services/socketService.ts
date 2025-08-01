@@ -4,7 +4,9 @@ import io, { Socket } from 'socket.io-client';
 import { API_BASE_URL } from '../config/api';
 import { getToken } from './authService';
 import { store } from '../redux/store';
-import { addNotification } from '../redux/notificationSlice'; // Assuming a notification slice
+import { addNotification } from '../redux/notificationSlice';
+import { addOrUpdateSwap } from '../redux/swapSlice';
+import { addMessage } from '../redux/messageSlice';
 
 class SocketService {
   private socket: Socket | null = null;
@@ -43,12 +45,12 @@ class SocketService {
 
     this.socket.on('swapUpdate', (swap) => {
       console.log('Swap update received:', swap);
-      // TODO: Dispatch to a swap slice or update UI directly
+      store.dispatch(addOrUpdateSwap(swap));
     });
 
     this.socket.on('newMessage', (message) => {
       console.log('New message received:', message);
-      // TODO: Dispatch to a message slice or update UI directly
+      store.dispatch(addMessage(message));
     });
   };
 

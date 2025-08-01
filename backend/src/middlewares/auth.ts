@@ -17,7 +17,7 @@ export const authenticate = async (
     return res.status(401).json({ message: 'Invalid or expired token' })
 
   try {
-    const user = await User.findById(payload.id)
+    const user = await User.findById(payload.id).populate('badges');
     if (!user || user.isBanned)
       return res.status(403).json({ message: 'User not allowed' })
     req.user = user

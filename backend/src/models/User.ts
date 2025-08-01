@@ -1,5 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
+import mongoose, { Document, Schema } from 'mongoose'
+
 export interface IUser extends Document {
   username: string
   email: string
@@ -16,6 +18,9 @@ export interface IUser extends Document {
   rating: number
   feedbacks: mongoose.Types.ObjectId[]
   fcmTokens: string[]
+  ascendPoints: number; // New field for gamification
+  ascendLevel: string; // New field for gamification
+  badges: mongoose.Types.ObjectId[]; // New field for gamification
   createdAt: Date
   updatedAt: Date
 }
@@ -43,6 +48,9 @@ const UserSchema = new Schema<IUser>(
     rating: { type: Number, default: 0, min: 0, max: 5 },
     feedbacks: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
     fcmTokens: { type: [String], default: [] },
+    ascendPoints: { type: Number, default: 0 }, // Default to 0 points
+    ascendLevel: { type: String, default: 'Novice' }, // Default level
+    badges: [{ type: Schema.Types.ObjectId, ref: 'Badge' }], // Array of earned badges
   },
   { timestamps: true }
 )

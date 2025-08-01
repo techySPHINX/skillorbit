@@ -1,5 +1,6 @@
 import Feedback, { IFeedback } from '../models/Feedback'
 import { logger } from '../config/logger'
+import { addPoints } from './gamificationService'
 
 export const createFeedback = async (
   feedbackData: Partial<IFeedback>
@@ -22,6 +23,10 @@ export const createFeedback = async (
 
     const savedFeedback = await feedback.save()
     logger.info(`Feedback created from ${fromUser} to ${toUser}`)
+
+    // Award points for giving feedback
+    await addPoints(fromUser.toString(), 'FEEDBACK_GIVEN');
+
     return savedFeedback
   } catch (error) {
     logger.error('Error creating feedback:', error)

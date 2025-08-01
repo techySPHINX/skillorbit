@@ -1,7 +1,8 @@
 // src/screens/auth/RegisterScreen.tsx
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { globalStyles } from '../../styles/globalStyles';
 import { COLORS } from '../../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,35 +28,45 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        placeholderTextColor={COLORS.gray}
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor={COLORS.gray}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor={COLORS.gray}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      {error && <Text style={styles.error}>{error}</Text>}
-      <View style={styles.buttonContainer}>
+    <LinearGradient
+      colors={[COLORS.backgroundLight, COLORS.white]}
+      style={styles.gradientContainer}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+    >
+      <View style={styles.contentContainer}>
+        {/* Placeholder for Logo/Branding */}
+        <Image
+          source={require('../../assets/logo.png')} // Assuming a logo.png in assets
+          style={styles.logo}
+        />
+        <Text style={globalStyles.title}>Join SkillOrbit!</Text>
+        <TextInput
+          style={globalStyles.input}
+          placeholder="Username"
+          placeholderTextColor={COLORS.gray}
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={globalStyles.input}
+          placeholder="Email"
+          placeholderTextColor={COLORS.gray}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={globalStyles.input}
+          placeholder="Password"
+          placeholderTextColor={COLORS.gray}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        {error && <Text style={styles.error}>{error}</Text>}
         <TouchableOpacity
           style={globalStyles.buttonPrimary}
           onPress={handleRegister}
@@ -72,34 +83,39 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.linkButtonText}>Already have an account? Login</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    ...globalStyles.container,
+  gradientContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  contentContainer: {
+    width: '90%',
+    maxWidth: 400,
     padding: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 8,
+    alignItems: 'center',
   },
-  title: {
-    ...globalStyles.title,
-    fontSize: 28,
-    marginBottom: 30,
-  },
-  input: {
-    ...globalStyles.input,
-    width: '100%',
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    resizeMode: 'contain',
   },
   error: {
     color: COLORS.danger,
     marginBottom: 10,
     textAlign: 'center',
-  },
-  buttonContainer: {
-    width: '100%',
-    marginTop: 10,
   },
   linkButton: {
     marginTop: 15,

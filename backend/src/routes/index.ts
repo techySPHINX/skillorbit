@@ -6,6 +6,7 @@ import swapRoutes from './swapRoutes'
 import feedbackRoutes from './feedbackRoutes'
 import adminRoutes from './adminRoutes'
 import notificationRoutes from './notificationRoutes'
+import gamificationRoutes from './gamificationRoutes'
 import { apiLimiter } from '../middlewares/rateLimiter'
 
 const router = Router()
@@ -57,5 +58,11 @@ router.use('/admin', adminRoutes)
  * @desc User notification routes
  */
 router.use('/notifications', notificationRoutes)
+
+/**
+ * @route /gamification
+ * @desc Gamification routes
+ */
+router.use('/gamification', gamificationRoutes)
 
 export default router

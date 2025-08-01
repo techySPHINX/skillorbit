@@ -1,21 +1,22 @@
 import User from '../models/User'
 import AdminLog from '../models/AdminLog'
 import { logger } from '../config/logger'
+import { emitAdminEvent } from '../sockets/socketEmitter'
 
 export const getUsers = async (
-  filter: Record<string, any> = {},
-  options: Record<string, any> = {}
-): Promise<any[]> => {
+  filter: Record<string, unknown> = {},
+  options: Record<string, unknown> = {}
+): Promise<unknown[]> => {
   try {
     const allowedFilters = ['role', 'isBanned', 'username', 'email']
-    const sanitizedFilter: Record<string, any> = {}
+    const sanitizedFilter: Record<string, unknown> = {}
     for (const key of allowedFilters) {
       if (filter[key] !== undefined) {
         sanitizedFilter[key] = filter[key]
       }
     }
 
-    return await User.find(sanitizedFilter, null, options).lean().exec()
+    return await User.find(sanitizedFilter, null, options).populate('badges').lean().exec()
   } catch (error) {
     logger.error('Error getting users:', error)
     throw new Error('Failed to get users.')
@@ -33,7 +34,7 @@ export const banUserById = async (
 
     await User.findByIdAndUpdate(userId, { isBanned: true })
 
-    await AdminLog.create({
+    const adminLog = await AdminLog.create({
       action: 'ban_user',
       performedBy: adminId,
       targetUser: userId,
@@ -41,6 +42,7 @@ export const banUserById = async (
     })
 
     logger.info(`User ${userId} banned by admin ${adminId}`)
+    emitAdminEvent('adminLog', adminLog); // Emit admin log event
   } catch (error) {
     logger.error('Error banning user:', error)
     throw new Error('Failed to ban user.')
@@ -58,7 +60,7 @@ export const unbanUserById = async (
 
     await User.findByIdAndUpdate(userId, { isBanned: false })
 
-    await AdminLog.create({
+    const adminLog = await AdminLog.create({
       action: 'unban_user',
       performedBy: adminId,
       targetUser: userId,
@@ -66,6 +68,7 @@ export const unbanUserById = async (
     })
 
     logger.info(`User ${userId} unbanned by admin ${adminId}`)
+    emitAdminEvent('adminLog', adminLog); // Emit admin log event
   } catch (error) {
     logger.error('Error unbanning user:', error)
     throw new Error('Failed to unban user.')
@@ -73,11 +76,11 @@ export const unbanUserById = async (
 }
 
 export const getAdminLogs = async (
-  filter: Record<string, any> = {}
-): Promise<any[]> => {
+  filter: Record<string, unknown> = {}
+): Promise<unknown[]> => {
   try {
     return await AdminLog.find(filter)
-      .populate('performedBy targetUser', 'username email') 
+      .populate('performedBy targetUser', 'username email')
       .lean()
       .exec()
   } catch (error) {

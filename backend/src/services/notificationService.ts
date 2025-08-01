@@ -3,19 +3,21 @@ import { findUserById } from './userService'
 import { logger } from '../config/logger'
 import admin from 'firebase-admin'
 
-const serviceAccount = require('../../firebase-service-account.json')
+import serviceAccount from '../../firebase-service-account.json'
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 })
+
+import { emitNotification } from '../sockets/socketEmitter';
 
 export const createNotification = async (
   notificationData: Partial<INotification>
 ): Promise<INotification> => {
   try {
-    const { user, message } = notificationData
+    const { user, message } = notificationData;
     if (!user || !message) {
-      throw new Error('User and message are required for notification.')
+      throw new Error('User and message are required for notification.');
     }
 
     const notification = new Notification({
@@ -23,20 +25,22 @@ export const createNotification = async (
       message,
       type: notificationData.type || 'general',
       isRead: notificationData.isRead || false,
-    })
+    });
 
-    const savedNotification = await notification.save()
-    logger.info(`Notification created for user ${user}`)
+    const savedNotification = await notification.save();
+    logger.info(`Notification created for user ${user}`);
 
-    // Send push notification
-    await sendPushNotification(user.toString(), message)
+    // Emit notification via WebSocket
+    emitNotification(user.toString(), savedNotification);
 
-    return savedNotification
+    await sendPushNotification(user.toString(), message);
+
+    return savedNotification;
   } catch (error) {
-    logger.error('Error creating notification:', error)
-    throw new Error('Failed to create notification.')
+    logger.error('Error creating notification:', error);
+    throw new Error('Failed to create notification.');
   }
-}
+};
 
 export const getNotificationsByUser = async (
   userId: string
@@ -86,41 +90,46 @@ export const sendPushNotification = async (userId: string, message: string) => {
   try {
     const user = await findUserById(userId)
     if (!user || !user.fcmTokens || user.fcmTokens.length === 0) {
-      logger.info(`User ${userId} has no FCM tokens, skipping push notification.`)
+      logger.info(
+        `User ${userId} has no FCM tokens, skipping push notification.`
+      )
       return
     }
 
-    const payload = {
+    const multicastMessage = {
+      tokens: user.fcmTokens,
       notification: {
         title: 'New Notification',
         body: message,
       },
     }
 
-    const response = await admin.messaging().sendToDevice(user.fcmTokens, payload)
-    logger.info(`Push notification sent to user ${userId}`)
-
-    // Clean up invalid tokens
+    // Declare tokensToRemove array
     const tokensToRemove: string[] = []
-    response.results.forEach((result, index) => {
+
+    // Send the push notification
+    const response = await admin.messaging().sendEachForMulticast(multicastMessage)
+
+    response.responses.forEach((result: admin.messaging.SendResponse, index: number) => {
       const error = result.error
       if (error) {
         logger.error(
           `Failed to send notification to token ${user.fcmTokens[index]}`,
           error
         )
-        if (
-          error.code === 'messaging/invalid-registration-token' ||
-          error.code === 'messaging/registration-token-not-registered'
-        ) {
-          tokensToRemove.push(user.fcmTokens[index])
+          if (
+            error.code &&
+          (error.code === 'messaging/invalid-registration-token' ||
+            error.code === 'messaging/registration-token-not-registered')
+          ) {
+            tokensToRemove.push(user.fcmTokens[index])
         }
       }
-    })
+    )
 
     if (tokensToRemove.length > 0) {
       user.fcmTokens = user.fcmTokens.filter(
-        (token) => !tokensToRemove.includes(token)
+        token => !tokensToRemove.includes(token)
       )
       await user.save()
       logger.info(`Removed ${tokensToRemove.length} invalid FCM tokens.`)

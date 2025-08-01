@@ -1,6 +1,7 @@
 import { FilterQuery } from 'mongoose'
 import Skill, { ISkill } from '../models/Skill'
 import { logger } from '../config/logger'
+import { addPoints } from './gamificationService'
 
 export const createSkill = async (
   skillData: Partial<ISkill>
@@ -20,6 +21,10 @@ export const createSkill = async (
     const skill = new Skill(skillData)
     const savedSkill = await skill.save()
     logger.info(`Skill created: ${name} by user ${createdBy}`)
+
+    // Award points for creating a skill
+    await addPoints(createdBy.toString(), 'SKILL_CREATED');
+
     return savedSkill
   } catch (error) {
     logger.error('Error creating skill:', error)

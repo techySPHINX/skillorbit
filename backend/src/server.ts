@@ -16,6 +16,7 @@ import { errorHandler } from './middlewares/errorHandler'
 import { apiLimiter } from './middlewares/rateLimiter'
 import routes from './routes'
 import { setupSocketIO } from './sockets'
+import { setSocketIOInstance } from './sockets/socketEmitter'
 
 const app: Application = express()
 
@@ -60,6 +61,7 @@ const io = new SocketIOServer(server, {
 })
 
 setupSocketIO(io)
+setSocketIOInstance(io) // Set the Socket.IO instance for the emitter
 logger.info('Socket.IO server initialized and ready.')
 
 process.on('SIGINT', async () => {

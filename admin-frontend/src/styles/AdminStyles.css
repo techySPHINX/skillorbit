@@ -1,0 +1,58 @@
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2d3748; /* Dark gray text */
+}
+
+.form-group input[type="email"],
+.form-group input[type="text"],
+.form-group textarea {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #a0aec0; /* Gray border */
+  border-radius: 8px;
+  font-size: 1em;
+  color: #2d3748; /* Dark gray text */
+  background-color: #fff; /* White background */
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff; /* White background */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7; /* Lighter gray border */
+  color: #2d3748; /* Dark gray text */
+}
+
+table th {
+  background-color: #fdf6f9; /* Light pink background for headers */
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+table tbody tr:hover {
+  background-color: #fdf6f9; /* Light pink on hover */
+}
